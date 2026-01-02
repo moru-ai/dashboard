@@ -1,14 +1,15 @@
 /**
- * Sitemap Generator for E2B Website
+ * Sitemap Generator for Moru Website
  *
- * This module generates a unified sitemap for the E2B website by aggregating sitemaps
- * from multiple sources including the main landing page, blog, documentation, and Framer sites.
+ * This module generates a unified sitemap for the Moru website by aggregating sitemaps
+ * from multiple sources including the main landing page, blog, documentation, and SDK reference.
  * It handles fetching, parsing, deduplication, and proper URL formatting to ensure all content
  * is discoverable by search engines.
  */
 
 import { ALLOW_SEO_INDEXING } from '@/configs/flags'
 import {
+  DOCUMENTATION_DOMAIN,
   LANDING_PAGE_DOMAIN,
   ROUTE_REWRITE_CONFIG,
   SDK_REFERENCE_DOMAIN,
@@ -16,7 +17,6 @@ import {
 import { DomainConfig } from '@/types/rewrites.types'
 import { XMLParser } from 'fast-xml-parser'
 import { MetadataRoute } from 'next'
-import { DOCUMENTATION_DOMAIN } from '../../next.config.mjs'
 
 // Cache the sitemap for 15 minutes (in seconds)
 const SITEMAP_CACHE_TIME = 15 * 60
@@ -46,31 +46,6 @@ type Site = {
 }
 
 /**
- * List of sites to include in the unified sitemap
- * Each site has its own sitemap.xml that will be fetched and processed
- */
-const sites: Site[] = [
-  {
-    sitemapUrl: `https://${LANDING_PAGE_DOMAIN}/sitemap.xml`,
-    priority: 1.0,
-    changeFrequency: 'weekly',
-    baseUrl: 'https://e2b.dev',
-  },
-  {
-    sitemapUrl: `https://${SDK_REFERENCE_DOMAIN}/sitemap.xml`,
-    priority: 0.7,
-    changeFrequency: 'weekly',
-    baseUrl: 'https://e2b.dev',
-  },
-  {
-    sitemapUrl: `https://${DOCUMENTATION_DOMAIN}/sitemap.xml`,
-    priority: 0.9,
-    changeFrequency: 'weekly',
-    baseUrl: 'https://e2b.dev',
-  },
-]
-
-/**
  * Structure of a single URL entry in a sitemap
  */
 type SitemapData = {
@@ -90,6 +65,43 @@ type Sitemap = {
 }
 
 /**
+ * Build list of sites to include in sitemap based on configured domains.
+ * Sites are only included if their corresponding environment variable is set.
+ */
+function getSites(): Site[] {
+  const sites: Site[] = []
+
+  if (LANDING_PAGE_DOMAIN) {
+    sites.push({
+      sitemapUrl: `https://${LANDING_PAGE_DOMAIN}/sitemap.xml`,
+      priority: 1.0,
+      changeFrequency: 'weekly',
+      baseUrl: 'https://moru.io',
+    })
+  }
+
+  if (SDK_REFERENCE_DOMAIN) {
+    sites.push({
+      sitemapUrl: `https://${SDK_REFERENCE_DOMAIN}/sitemap.xml`,
+      priority: 0.7,
+      changeFrequency: 'weekly',
+      baseUrl: 'https://moru.io',
+    })
+  }
+
+  if (DOCUMENTATION_DOMAIN) {
+    sites.push({
+      sitemapUrl: `https://${DOCUMENTATION_DOMAIN}/sitemap.xml`,
+      priority: 0.9,
+      changeFrequency: 'weekly',
+      baseUrl: 'https://moru.io',
+    })
+  }
+
+  return sites
+}
+
+/**
  * Fetches and parses a sitemap XML file from a given URL
  *
  * @param url The URL of the sitemap.xml file to fetch
@@ -101,9 +113,7 @@ async function getXmlData(url: string): Promise<Sitemap> {
   try {
     const response = await fetch(url, {
       next: { revalidate: SITEMAP_CACHE_TIME },
-      headers: {
-        Accept: 'application/xml',
-      },
+      headers: { Accept: 'application/xml' },
     })
 
     if (!response.ok) {
@@ -147,7 +157,7 @@ function findRewriteConfig(site: Site): DomainConfig | undefined {
  */
 async function getSitemap(site: Site): Promise<MetadataRoute.Sitemap> {
   const data = await getXmlData(site.sitemapUrl)
-  const rewriteConfig = findRewriteConfig(site) // Find the rewrite config for this site
+  const rewriteConfig = findRewriteConfig(site)
 
   if (!data || !site.baseUrl) {
     // Ensure baseUrl is defined, as it's crucial for constructing final URLs
@@ -193,8 +203,8 @@ async function getSitemap(site: Site): Promise<MetadataRoute.Sitemap> {
       return {
         url: finalUrl,
         priority: line?.priority ?? site.priority, // Use nullish coalescing for defaults
-        changeFrequency: line?.changefreq ?? site.changeFrequency, // Use nullish coalescing
-        lastModified: line?.lastmod ?? site.lastModified, // Use nullish coalescing
+        changeFrequency: line?.changefreq ?? site.changeFrequency,
+        lastModified: line?.lastmod ?? site.lastModified,
       }
     } catch (error) {
       console.error(`Error processing sitemap URL ${line.loc}:`, error)
@@ -227,7 +237,12 @@ async function getSitemap(site: Site): Promise<MetadataRoute.Sitemap> {
   }
 }
 
-export const constructSitemap = async (): Promise<MetadataRoute.Sitemap> => {
+/**
+ * Constructs the complete sitemap by aggregating from all sources
+ *
+ * @returns Complete sitemap for the Moru website
+ */
+export async function constructSitemap(): Promise<MetadataRoute.Sitemap> {
   // Return empty sitemap if SEO indexing is not allowed
   if (!ALLOW_SEO_INDEXING) {
     return []
@@ -235,7 +250,8 @@ export const constructSitemap = async (): Promise<MetadataRoute.Sitemap> => {
 
   let mergedSitemap: MetadataRoute.Sitemap = []
 
-  // Fetch sitemaps from all configured sites (Webflow & Framer sites + docs)
+  // Fetch sitemaps from all configured sites (landing page, docs, SDK reference)
+  const sites = getSites()
   for (const site of sites) {
     const urls = await getSitemap(site)
     mergedSitemap = mergedSitemap.concat(urls)
@@ -245,7 +261,7 @@ export const constructSitemap = async (): Promise<MetadataRoute.Sitemap> => {
   const urlMap = new Map<string, MetadataRoute.Sitemap[number]>()
   mergedSitemap.forEach((entry) => {
     const existingEntry = urlMap.get(entry.url)
-    // Keep the entry with the highest priority (lower number means higher priority in sitemaps typically, but the code uses higher number = higher priority)
+    // Keep the entry with the highest priority
     // Ensure priority is treated as a number, defaulting to 0 if undefined
     const currentPriority = entry.priority ?? 0
     const existingPriority = existingEntry?.priority ?? 0
@@ -268,7 +284,7 @@ export const constructSitemap = async (): Promise<MetadataRoute.Sitemap> => {
  * Fetches and merges sitemaps from all configured sites,
  * deduplicates entries, and returns a sorted list of URLs
  *
- * @returns Complete sitemap for the E2B website
+ * @returns Complete sitemap for the Moru website
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return await constructSitemap()

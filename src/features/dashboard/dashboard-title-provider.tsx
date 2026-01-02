@@ -8,7 +8,7 @@ import { useDashboard } from './context'
 /**
  * DashboardTitleProvider updates the document title based on the current team and pathname.
  * It shows either:
- * - "{team_name} | {page_name} | E2B" when a team is selected
+ * - "{team_name} | {page_name} | Moru" when a team is selected
  * - Default metadata title when no team is selected
  */
 export const DashboardTitleProvider = () => {
@@ -29,7 +29,7 @@ export const DashboardTitleProvider = () => {
     const teamName =
       team.name.length > 10 ? `${team.name.slice(0, 10)}...` : team.name
 
-    return `${teamName} | ${pageName} | E2B`
+    return `${teamName} | ${pageName} | Moru`
   }, [team, pathname])
 
   // Update document title whenever title changes

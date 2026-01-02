@@ -21,10 +21,10 @@
       "has": [
         {
           "type": "host",
-          "value": "blog.e2b.dev"
+          "value": "blog.moru.io"
         }
       ],
-      "destination": "https://e2b.dev/blog",
+      "destination": "https://moru.io/blog",
       "permanent": true
     },
     {
@@ -32,20 +32,20 @@
       "has": [
         {
           "type": "host",
-          "value": "blog.e2b.dev"
+          "value": "blog.moru.io"
         }
       ],
-      "destination": "https://e2b.dev/blog/:path*",
+      "destination": "https://moru.io/blog/:path*",
       "permanent": true
     },
     {
       "source": "/log/:path*",
-      "destination": "https://e2b.dev/blog/:path*",
+      "destination": "https://moru.io/blog/:path*",
       "permanent": true
     },
     {
       "source": "/blog/log/:path*",
-      "destination": "https://e2b.dev/blog/:path*",
+      "destination": "https://moru.io/blog/:path*",
       "permanent": true
     },
     {
@@ -53,10 +53,10 @@
       "has": [
         {
           "type": "host",
-          "value": "changelog.e2b.dev"
+          "value": "changelog.moru.io"
         }
       ],
-      "destination": "https://e2b.dev/changelog",
+      "destination": "https://moru.io/changelog",
       "permanent": true
     },
     {
@@ -64,10 +64,10 @@
       "has": [
         {
           "type": "host",
-          "value": "docs.e2b.dev"
+          "value": "docs.moru.io"
         }
       ],
-      "destination": "https://e2b.dev/docs",
+      "destination": "https://moru.io/docs",
       "permanent": true
     },
     {
@@ -75,10 +75,10 @@
       "has": [
         {
           "type": "host",
-          "value": "docs.e2b.dev"
+          "value": "docs.moru.io"
         }
       ],
-      "destination": "https://e2b.dev/docs/:path*",
+      "destination": "https://moru.io/docs/:path*",
       "permanent": true
     }
   ]

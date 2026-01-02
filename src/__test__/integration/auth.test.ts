@@ -22,10 +22,11 @@ console.error = vi.fn()
 
 // Mock global fetch for health check
 const originalFetch = global.fetch
-global.fetch = vi.fn().mockResolvedValue({
+const mockFetch = vi.fn().mockResolvedValue({
   ok: true,
   json: () => Promise.resolve({ version: 'v2.60.7', name: 'GoTrue' }),
 })
+global.fetch = mockFetch as unknown as typeof fetch
 
 // Mock Supabase client
 const mockSupabaseClient = {
@@ -53,7 +54,7 @@ vi.mock('@/lib/clients/supabase/admin', () => ({
 vi.mock('next/headers', () => ({
   headers: vi.fn(() => ({
     get: vi.fn((key) => {
-      if (key === 'origin') return 'https://app.e2b.dev'
+      if (key === 'origin') return 'https://app.moru.io'
       return null
     }),
   })),
@@ -82,7 +83,7 @@ describe('Auth Actions - Integration Tests', () => {
   beforeEach(() => {
     vi.resetAllMocks()
     // Set up fetch mock for health check
-    ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
+    mockFetch.mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ version: 'v2.60.7', name: 'GoTrue' }),
     })
@@ -144,12 +145,11 @@ describe('Auth Actions - Integration Tests', () => {
       const result = await signInAction({
         email: 'test@example.com',
         password: 'password123',
-        returnTo: 'https://app.e2b.dev/dashboard/team-123/sandboxes',
+        returnTo: 'https://app.moru.io/dashboard/team-123/sandboxes',
       })
 
       expect(result?.validationErrors?.fieldErrors.returnTo).toBeDefined()
     })
-
 
     it('should throw validation error if returnTo is a malicious URL', async () => {
       mockSupabaseClient.auth.signInWithPassword.mockResolvedValue({

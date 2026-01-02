@@ -50,14 +50,14 @@ export const PROTECTED_URLS = {
 
 export const HELP_URLS = {
   BUILD_TEMPLATE:
-    'https://e2b.dev/docs/sandbox-template#4-build-your-sandbox-template',
-  START_COMMAND: 'https://e2b.dev/docs/sandbox-template/start-cmd',
+    'https://moru.io/docs/sandbox-template#4-build-your-sandbox-template',
+  START_COMMAND: 'https://moru.io/docs/sandbox-template/start-cmd',
 }
 
 export const BASE_URL = process.env.VERCEL_ENV
   ? process.env.VERCEL_ENV === 'production'
-    ? 'https://e2b.dev'
+    ? 'https://moru.io'
     : `https://${process.env.VERCEL_BRANCH_URL}`
   : 'http://localhost:3000'
 
-export const GITHUB_URL = 'https://github.com/e2b-dev'
+export const GITHUB_URL = 'https://github.com/moru-ai'

@@ -19,7 +19,7 @@ export async function register() {
     } = process.env
 
     registerOTel({
-      serviceName: process.env.OTEL_SERVICE_NAME || 'e2b-dashboard',
+      serviceName: process.env.OTEL_SERVICE_NAME || 'moru-dashboard',
       attributes: {
         // Vercel context
         ...(VERCEL_ENV && { 'vercel.env': VERCEL_ENV }),

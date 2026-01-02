@@ -48,7 +48,7 @@ const {
 
 const sdk = new NodeSDK({
   resource: resourceFromAttributes({
-    [ATTR_SERVICE_NAME]: OTEL_SERVICE_NAME || 'e2b-dashboard',
+    [ATTR_SERVICE_NAME]: OTEL_SERVICE_NAME || 'moru-dashboard',
     [ATTR_SERVICE_VERSION]: process.env.BUILD,
     // Parse additional resource attributes from environment
     ...parseResourceAttributes(OTEL_RESOURCE_ATTRIBUTES),

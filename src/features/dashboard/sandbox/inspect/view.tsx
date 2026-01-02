@@ -4,7 +4,7 @@ import SandboxInspectProvider from '@/features/dashboard/sandbox/inspect/context
 import SandboxInspectFilesystem from '@/features/dashboard/sandbox/inspect/filesystem'
 import SandboxInspectViewer from '@/features/dashboard/sandbox/inspect/viewer'
 import { cn } from '@/lib/utils'
-import type { EntryInfo } from 'e2b'
+import type { EntryInfo } from '@moru-ai/core'
 
 interface SandboxInspectViewProps {
   rootPath: string

@@ -85,7 +85,7 @@ vi.mock('next/server', async () => {
 })
 
 function createMockRequest({
-  url = 'https://app.e2b.dev',
+  url = 'https://app.moru.io',
   path = '/',
   headers = {},
 }: {

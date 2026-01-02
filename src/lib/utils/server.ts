@@ -10,10 +10,10 @@ import { l } from '../clients/logger/logger'
 import { returnServerError } from './action'
 
 /*
- *  This function generates an e2b user access token for a given user.
+ *  This function generates a moru user access token for a given user.
  */
-export async function generateE2BUserAccessToken(supabaseAccessToken: string) {
-  const TOKEN_NAME = 'e2b_dashboard_generated_access_token'
+export async function generateMoruUserAccessToken(supabaseAccessToken: string) {
+  const TOKEN_NAME = 'moru_dashboard_generated_access_token'
 
   const res = await infra.POST('/access-tokens', {
     body: {
@@ -27,7 +27,7 @@ export async function generateE2BUserAccessToken(supabaseAccessToken: string) {
   if (res.error) {
     l.error(
       {
-        key: 'GENERATE_E2B_USER_ACCESS_TOKEN:INFRA_ERROR',
+        key: 'GENERATE_MORU_USER_ACCESS_TOKEN:INFRA_ERROR',
         message: res.error.message,
         error: res.error,
         context: {
@@ -37,10 +37,10 @@ export async function generateE2BUserAccessToken(supabaseAccessToken: string) {
           name: TOKEN_NAME,
         },
       },
-      'Failed to generate e2b user access token'
+      'Failed to generate moru user access token'
     )
 
-    return returnServerError(`Failed to generate e2b user access token`)
+    return returnServerError(`Failed to generate moru user access token`)
   }
 
   return res.data

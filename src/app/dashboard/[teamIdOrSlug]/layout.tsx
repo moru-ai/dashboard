@@ -15,7 +15,7 @@ import { Metadata } from 'next/types'
 import { serializeError } from 'serialize-error'
 
 export const metadata: Metadata = {
-  title: 'Dashboard - E2B',
+  title: 'Dashboard - Moru',
   description: METADATA.description,
   openGraph: METADATA.openGraph,
   twitter: METADATA.twitter,

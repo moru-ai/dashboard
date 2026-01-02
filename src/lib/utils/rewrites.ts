@@ -66,7 +66,7 @@ function rewriteSeoTags($: cheerio.CheerioAPI, options: SeoTagOptions): void {
   const robotsContent = allowIndexing ? 'index,follow' : 'noindex,nofollow'
 
   const formattedPathname = pathname.startsWith('/') ? pathname : `/${pathname}`
-  const canonicalUrl = `https://e2b.dev${formattedPathname}`
+  const canonicalUrl = `https://moru.io${formattedPathname}`
 
   const $head = $('head')
   if ($head.length > 0) {

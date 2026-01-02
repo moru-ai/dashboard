@@ -4,7 +4,7 @@ import { l } from '@/lib/clients/logger/logger'
 import { createClient } from '@/lib/clients/supabase/server'
 import { getDefaultTeam } from '@/server/auth/get-default-team'
 import { getSessionInsecure } from '@/server/auth/get-session'
-import Sandbox from 'e2b'
+import Sandbox from '@moru-ai/core'
 import { NextRequest, NextResponse } from 'next/server'
 import { serializeError } from 'serialize-error'
 
@@ -38,7 +38,7 @@ export const GET = async (req: NextRequest) => {
     const defaultTeam = await getDefaultTeam(data.user.id)
 
     const sbx = await Sandbox.create('base', {
-      domain: process.env.NEXT_PUBLIC_E2B_DOMAIN,
+      domain: process.env.NEXT_PUBLIC_MORU_DOMAIN,
       headers: {
         ...SUPABASE_AUTH_HEADERS(session.access_token, defaultTeam.id),
       },

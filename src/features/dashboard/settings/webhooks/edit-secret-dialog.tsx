@@ -106,7 +106,7 @@ export default function WebhookEditSecretDialog({
           </DialogTitle>
           <div className="flex flex-col gap-3 pt-2">
             <p className="text-fg-tertiary prose-body">
-              <strong className="text-fg-secondary">Important:</strong> E2B
+              <strong className="text-fg-secondary">Important:</strong> Moru
               sends only one signature secret at a time. Once you change it, the
               old secret immediately stops working.
             </p>
@@ -123,8 +123,8 @@ export default function WebhookEditSecretDialog({
                 </li>
                 <li>Deploy your changes</li>
                 <li>
-                  Then roll confirm your new custom secret here — E2B will start
-                  using the new secret
+                  Then roll confirm your new custom secret here — Moru will
+                  start using the new secret
                 </li>
                 <li>Remove old secret validation from your code later</li>
               </ol>

@@ -4,21 +4,22 @@
  * and testing of dashboard features.
  */
 
-import { Sandbox } from 'e2b'
+import { Sandbox } from '@moru-ai/core'
 import { describe, it } from 'vitest'
 
 const l = console
 
 // Ensure required environment variables exist
-const { TEST_E2B_DOMAIN, TEST_E2B_API_KEY, TEST_E2B_TEMPLATE } = import.meta.env
+const { TEST_MORU_DOMAIN, TEST_MORU_API_KEY, TEST_MORU_TEMPLATE } = import.meta
+  .env
 
-if (!TEST_E2B_DOMAIN || !TEST_E2B_API_KEY) {
+if (!TEST_MORU_DOMAIN || !TEST_MORU_API_KEY) {
   throw new Error(
-    'Missing environment variables: TEST_E2B_DOMAIN and/or TEST_E2B_API_KEY'
+    'Missing environment variables: TEST_MORU_DOMAIN and/or TEST_MORU_API_KEY'
   )
 }
 
-const TEMPLATE = TEST_E2B_TEMPLATE || 'base'
+const TEMPLATE = TEST_MORU_TEMPLATE || 'base'
 
 const TEST_DURATION_MINUTES = 15
 const SPAWN_PROBABILITY = 0.4
@@ -80,8 +81,8 @@ async function runTrafficSimulation(config: TrafficTestConfig) {
       ) {
         try {
           const sandbox = await Sandbox.create(template, {
-            domain: TEST_E2B_DOMAIN,
-            apiKey: TEST_E2B_API_KEY,
+            domain: TEST_MORU_DOMAIN,
+            apiKey: TEST_MORU_API_KEY,
             timeoutMs: sandboxTimeoutMs,
             metadata: {
               testId,
@@ -136,7 +137,7 @@ async function runTrafficSimulation(config: TrafficTestConfig) {
   }
 }
 
-describe('E2B Sandbox traffic simulator', () => {
+describe('Moru Sandbox traffic simulator', () => {
   it(
     `simulates traffic for ${TEST_DURATION_MINUTES} minutes with spawn probability ${SPAWN_PROBABILITY}`,
     { timeout: (TEST_DURATION_MINUTES + 1) * 60 * 1000 },

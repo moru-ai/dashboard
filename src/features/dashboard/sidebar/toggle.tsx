@@ -2,7 +2,7 @@
 
 import useKeydown from '@/lib/hooks/use-keydown'
 import { cn } from '@/lib/utils'
-import { E2BLogo } from '@/ui/brand'
+import { MoruLogo } from '@/ui/brand'
 import ClientOnly from '@/ui/client-only'
 import { Button } from '@/ui/primitives/button'
 import { useSidebar } from '@/ui/primitives/sidebar'
@@ -42,8 +42,8 @@ export default function DashboardSidebarToggle() {
             exit="hidden"
           >
             <ClientOnly className="flex items-center gap-1.5">
-              <E2BLogo className="size-6" />
-              <span className="prose-headline-small">E2B</span>
+              <MoruLogo className="size-6" />
+              <span className="prose-headline-small">Moru</span>
             </ClientOnly>
           </motion.span>
         )}

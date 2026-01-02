@@ -55,7 +55,7 @@ export async function proxy(request: NextRequest) {
       const headers = new Headers(request.headers)
 
       if (ALLOW_SEO_INDEXING) {
-        headers.set('x-e2b-should-index', '1')
+        headers.set('x-moru-should-index', '1')
       }
 
       const response = NextResponse.rewrite(rewriteUrl, {

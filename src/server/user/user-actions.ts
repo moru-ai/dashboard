@@ -1,7 +1,7 @@
 'use server'
 
 import { authActionClient } from '@/lib/clients/action'
-import { generateE2BUserAccessToken } from '@/lib/utils/server'
+import { generateMoruUserAccessToken } from '@/lib/utils/server'
 import { returnValidationErrors } from 'next-safe-action'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
@@ -114,7 +114,7 @@ export const getUserAccessTokenAction = authActionClient
   .action(async ({ ctx }) => {
     const { session } = ctx
 
-    const token = await generateE2BUserAccessToken(session.access_token)
+    const token = await generateMoruUserAccessToken(session.access_token)
 
     return token
   })

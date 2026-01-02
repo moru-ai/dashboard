@@ -1,23 +1,21 @@
 <!-- <p align="center">
-  <img width="100" src="/readme-assets/logo-circle.png" alt="e2b logo">
+  <img width="100" src="/readme-assets/logo-circle.png" alt="moru logo">
 </p> -->
 ![Dashboard Preview Dark](/readme-assets/dashboard-preview-dark.png#gh-dark-mode-only)
 ![Dashboard Preview Light](/readme-assets/dashboard-preview-light.png#gh-light-mode-only)
 
-# E2B Dashboard
+# Moru Dashboard
 
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
-[![Discord](https://img.shields.io/discord/1092455714431180995?color=7289DA&label=Discord&logo=discord&logoColor=white)](https://discord.com/channels/1092455714431180995)
-[![GitHub Stars](https://img.shields.io/github/stars/e2b-dev/dashboard?style=social)](https://github.com/e2b-dev/dashboard)
+[![GitHub Stars](https://img.shields.io/github/stars/moru-ai/dashboard?style=social)](https://github.com/moru-ai/dashboard)
 
 ## Quick Links
-- 📚 [Documentation](https://e2b.dev/docs)
-- 💬 [Discord Community](https://discord.gg/e2b)
-- 🐛 [Issue Tracker](https://github.com/e2b-dev/dashboard/issues)
+- 📚 [Documentation](https://moru.io/docs)
+- 🐛 [Issue Tracker](https://github.com/moru-ai/dashboard/issues)
 - 🤝 [Contributing Guide](CONTRIBUTING.md)
 
 ## Overview
-Our Dashboard is a modern, feature-rich web application built to manage and monitor E2B services. Built with Next.js 15 and React 19, it provides a seamless user experience for managing sandboxes, API keys, and usage analytics.
+Our Dashboard is a modern, feature-rich web application built to manage and monitor Moru services. Built with Next.js 15 and React 19, it provides a seamless user experience for managing sandboxes, API keys, and usage analytics.
 
 ## Features
 - **Modern Stack**: Built with Next.js 15, React 19, and TypeScript
@@ -28,7 +26,7 @@ Our Dashboard is a modern, feature-rich web application built to manage and moni
 
 ## Getting Started
 
-> **Self-hosting Note**: If you're planning to self-host this dashboard, you'll likely want to self-host our infrastructure first. Please refer to our [infrastructure repository](https://github.com/e2b-dev/infra) for guidance on setting up the E2B platform on your own infrastructure.
+> **Self-hosting Note**: If you're planning to self-host this dashboard, you'll likely want to self-host our infrastructure first. Please refer to our [infrastructure repository](https://github.com/moru-ai/infra) for guidance on setting up the Moru platform on your own infrastructure.
 
 ### Prerequisites
 - Node.js 18+
@@ -41,7 +39,7 @@ Our Dashboard is a modern, feature-rich web application built to manage and moni
 
 1. Clone the repository
 ```bash
-git clone https://github.com/e2b-dev/dashboard.git
+git clone https://github.com/moru-ai/dashboard.git
 cd dashboard
 ```
 
@@ -178,11 +176,8 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ## Support
 If you need help or have questions:
 
-1. Check our [Documentation](https://e2b.dev/docs)
-2. Join our [Discord Community](https://discord.gg/e2b)
-3. Open an [Issue](https://github.com/e2b-dev/dashboard/issues)
+1. Check our [Documentation](https://moru.io/docs)
+2. Open an [Issue](https://github.com/moru-ai/dashboard/issues)
 
 ## License
 This project is licensed under the Apache License, Version 2.0 - see the [LICENSE](LICENSE) file for details.
-
-Copyright 2025 FoundryLabs, Inc.

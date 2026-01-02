@@ -1,5 +1,5 @@
 {
-  "name": "@e2b/dashboard",
+  "name": "@moru/dashboard",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -8,9 +8,10 @@
     "build": "next build --turbopack",
     "start": "next start | pino-pretty --colorize",
     "preview": "next build --turbopack && next start | pino-pretty --colorize",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
     "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
     "prebuild": "bun scripts:check-app-env",
     "<<<<<<< Development Tools": "",
     "scan:local": "bunx react-scan@latest localhost:3000",
@@ -43,6 +44,7 @@
   "dependencies": {
     "@google-cloud/storage": "^7.15.2",
     "@hookform/resolvers": "^5.2.2",
+    "@moru-ai/core": "0.1.0",
     "@next-safe-action/adapter-react-hook-form": "^2.0.0",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.62.1",
@@ -104,7 +106,6 @@
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "deepmerge": "^4.3.1",
-    "e2b": "^2.7.0",
     "echarts": "^6.0.0",
     "echarts-for-react": "^3.0.2",
     "fast-xml-parser": "^4.5.1",

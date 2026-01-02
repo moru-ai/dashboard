@@ -1,5 +1,6 @@
-// NOTE: related to src/configs/rewrites.ts
-export const DOCUMENTATION_DOMAIN = 'e2b.mintlify.app'
+// External service domains (for conditional rewrites/redirects)
+const LANDING_PAGE_DOMAIN = process.env.LANDING_PAGE_DOMAIN || ''
+const DOCUMENTATION_DOMAIN = process.env.DOCUMENTATION_DOMAIN || ''
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -16,7 +17,7 @@ const config = {
   turbopack: {
     resolveAlias: {
       // Stub Node.js modules for browser builds
-      // e2b package bundles these packages. when dealing with browser chunks,
+      // moru package bundles these packages. when dealing with browser chunks,
       // we need to stub these packages for builds.
       fs: { browser: './stubs/fs.ts' },
       'node:fs': { browser: './stubs/fs.ts' },
@@ -44,6 +45,7 @@ const config = {
   ],
   rewrites: async () => ({
     beforeFiles: [
+      // PostHog proxy to avoid ad blockers
       {
         source: '/ph-proxy/static/:path*',
         destination: 'https://us-assets.i.posthog.com/static/:path*',
@@ -53,18 +55,33 @@ const config = {
         destination: 'https://us.i.posthog.com/:path*',
       },
 
-      // Asset rewrites for Mintlify
-      {
-        source: '/mintlify-assets/:path*',
-        destination: `https://${DOCUMENTATION_DOMAIN}/mintlify-assets/:path*`,
-      },
-      {
-        source: '/_mintlify/:path*',
-        destination: `https://${DOCUMENTATION_DOMAIN}/_mintlify/:path*`,
-      },
+      // Asset rewrites for Mintlify documentation (only when DOCUMENTATION_DOMAIN is set)
+      ...(DOCUMENTATION_DOMAIN
+        ? [
+            {
+              source: '/mintlify-assets/:path*',
+              destination: `https://${DOCUMENTATION_DOMAIN}/mintlify-assets/:path*`,
+            },
+            {
+              source: '/_mintlify/:path*',
+              destination: `https://${DOCUMENTATION_DOMAIN}/_mintlify/:path*`,
+            },
+          ]
+        : []),
     ],
   }),
   redirects: async () => [
+    // Redirect root to dashboard only when no landing page is configured
+    // When LANDING_PAGE_DOMAIN is set, the catch-all route handler proxies / to the landing page
+    ...(LANDING_PAGE_DOMAIN
+      ? []
+      : [
+          {
+            source: '/',
+            destination: '/dashboard',
+            permanent: false,
+          },
+        ]),
     {
       source: '/docs/api/cli',
       destination: '/auth/cli',

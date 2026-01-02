@@ -75,9 +75,9 @@ export default function SandboxInspectIncompatible({
                     {`cd path/to/your/template`}
                   </CodeBlock>
                   <div className="text-fg-secondary -ml-4 inline-block">
-                    The folder should contain an{' '}
+                    The folder should contain a{' '}
                     <Badge className={codeClassNames} variant="code">
-                      e2b.toml
+                      moru.toml
                     </Badge>{' '}
                     file.
                   </div>
@@ -88,7 +88,7 @@ export default function SandboxInspectIncompatible({
                   <div className="text-fg-secondary -ml-4 inline-block leading-6">
                     Use{' '}
                     <Badge className={codeClassNames} variant="code">
-                      e2b template build
+                      moru template build
                     </Badge>{' '}
                     along with custom{' '}
                     <Link

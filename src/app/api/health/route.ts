@@ -1,4 +1,3 @@
-import { kv } from '@/lib/clients/kv'
 import { supabaseAdmin } from '@/lib/clients/supabase/admin'
 import { NextResponse } from 'next/server'
 
@@ -8,20 +7,11 @@ export const maxDuration = 10
 
 export async function GET() {
   const checks = {
-    kv: false,
     supabase: false,
   }
 
-  // check kv
-  try {
-    await kv.ping()
-    checks.kv = true
-  } catch (error) {
-    // kv failed
-  }
-
   // check supabase
-  const { data: _, error } = await supabaseAdmin
+  const { error } = await supabaseAdmin
     .from('teams')
     .select('id')
     .limit(1)
@@ -31,7 +21,7 @@ export async function GET() {
     checks.supabase = true
   }
 
-  const allHealthy = checks.kv && checks.supabase
+  const allHealthy = checks.supabase
 
   return NextResponse.json(
     {

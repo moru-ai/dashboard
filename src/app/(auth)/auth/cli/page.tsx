@@ -2,7 +2,7 @@ import { AUTH_URLS, PROTECTED_URLS } from '@/configs/urls'
 import { l } from '@/lib/clients/logger/logger'
 import { createClient } from '@/lib/clients/supabase/server'
 import { encodedRedirect } from '@/lib/utils/auth'
-import { generateE2BUserAccessToken } from '@/lib/utils/server'
+import { generateMoruUserAccessToken } from '@/lib/utils/server'
 import { getDefaultTeamRelation } from '@/server/auth/get-default-team'
 import { Alert, AlertDescription, AlertTitle } from '@/ui/primitives/alert'
 import { CloudIcon, LaptopIcon, Link2Icon } from 'lucide-react'
@@ -31,11 +31,12 @@ async function handleCLIAuth(
 
   try {
     const defaultTeam = await getDefaultTeamRelation(userId)
-    const e2bAccessToken = await generateE2BUserAccessToken(supabaseAccessToken)
+    const moruAccessToken =
+      await generateMoruUserAccessToken(supabaseAccessToken)
 
     const searchParams = new URLSearchParams({
       email: userEmail,
-      accessToken: e2bAccessToken.token,
+      accessToken: moruAccessToken.token,
       defaultTeamId: defaultTeam.team_id,
     })
 

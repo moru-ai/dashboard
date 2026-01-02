@@ -1,24 +1,24 @@
 /**
- * This test builds a basic sandbox template using the E2B SDK,
+ * This test builds a basic sandbox template using the Moru SDK,
  * useful for development and testing of template building features in the dashboard.
  */
 
-import { Template } from 'e2b'
+import { Template } from '@moru-ai/core'
 import { describe, expect, it } from 'vitest'
 
 const l = console
 
-const { TEST_E2B_DOMAIN, TEST_E2B_API_KEY } = import.meta.env
+const { TEST_MORU_DOMAIN, TEST_MORU_API_KEY } = import.meta.env
 
-if (!TEST_E2B_DOMAIN || !TEST_E2B_API_KEY) {
+if (!TEST_MORU_DOMAIN || !TEST_MORU_API_KEY) {
   throw new Error(
-    'Missing environment variables: TEST_E2B_DOMAIN and/or TEST_E2B_API_KEY'
+    'Missing environment variables: TEST_MORU_DOMAIN and/or TEST_MORU_API_KEY'
   )
 }
 
 const BUILD_TIMEOUT_MS = 5 * 60 * 1000
 
-describe('E2B Template build test', () => {
+describe('Moru Template build test', () => {
   it(
     'builds a basic template with Node.js',
     { timeout: BUILD_TIMEOUT_MS },
@@ -39,8 +39,8 @@ describe('E2B Template build test', () => {
 
       const buildInfo = await Template.build(template, {
         alias: templateName,
-        apiKey: TEST_E2B_API_KEY,
-        domain: TEST_E2B_DOMAIN,
+        apiKey: TEST_MORU_API_KEY,
+        domain: TEST_MORU_DOMAIN,
         onBuildLogs: (log) => {
           l.info('test:build_log', {
             level: log.level,

@@ -31,7 +31,7 @@ jobs:
   integration-tests:
     name: Integration Tests
     runs-on: ubuntu-latest
-    needs: unit-tests  # run after unit tests pass
+    needs: unit-tests # run after unit tests pass
 
     # these are placeholders which is fine for integration tests
     env:
@@ -40,9 +40,9 @@ jobs:
       KV_REST_API_TOKEN: test-api-token
       KV_REST_API_URL: https://test-kv-api.example.com
       SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
-      INFRA_API_URL: https://api.e2b-test.dev
-      BILLING_API_URL: https://billing.e2b-test.dev
-      NEXT_PUBLIC_E2B_DOMAIN: e2b-test.dev
+      INFRA_API_URL: https://api.moru-test.io
+      BILLING_API_URL: https://billing.moru-test.io
+      NEXT_PUBLIC_MORU_DOMAIN: moru-test.io
       NEXT_PUBLIC_POSTHOG_KEY: test-posthog-key
       NEXT_PUBLIC_SUPABASE_URL: https://test-supabase-url.supabase.co
       NEXT_PUBLIC_SUPABASE_ANON_KEY: test-supabase-anon-key

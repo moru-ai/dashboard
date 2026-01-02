@@ -10,7 +10,7 @@ import {
   type FilesystemEvent,
   type Sandbox,
   type WatchHandle,
-} from 'e2b'
+} from '@moru-ai/core'
 import {
   MAX_VIEWABLE_FILE_SIZE_BYTES,
   type FilesystemStore,

@@ -76,12 +76,12 @@ Development tests are specialized tests designed to assist with feature developm
 To run development tests, you must create a `.env.test` file with the required environment variables:
 ```bash
 # .env.test
-TEST_E2B_DOMAIN=your-test-domain
-TEST_E2B_API_KEY=your-test-api-key
-TEST_E2B_TEMPLATE=base  # optional, defaults to 'base'
+TEST_MORU_DOMAIN=your-test-domain
+TEST_MORU_API_KEY=your-test-api-key
+TEST_MORU_TEMPLATE=base  # optional, defaults to 'base'
 ```
 
-**Note:** Development tests interact with real E2B services and will create actual resources. Use with caution and ensure proper cleanup.
+**Note:** Development tests interact with real Moru services and will create actual resources. Use with caution and ensure proper cleanup.
 
 ## Running Tests
 

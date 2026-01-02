@@ -37,7 +37,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-CLAUDE.md
+# claude
+.claude/settings.local.json
 
 # tooling
 /template

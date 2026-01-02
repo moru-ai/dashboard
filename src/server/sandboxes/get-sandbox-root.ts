@@ -3,7 +3,7 @@ import { authActionClient, withTeamIdResolution } from '@/lib/clients/action'
 import { l } from '@/lib/clients/logger/logger'
 import { TeamIdOrSlugSchema } from '@/lib/schemas/team'
 import { returnServerError } from '@/lib/utils/action'
-import Sandbox, { NotFoundError } from 'e2b'
+import Sandbox, { NotFoundError } from '@moru-ai/core'
 import { z } from 'zod'
 
 export const GetSandboxRootSchema = z.object({
@@ -26,7 +26,7 @@ export const getSandboxRoot = authActionClient
 
     try {
       sandbox = await Sandbox.connect(sandboxId, {
-        domain: process.env.NEXT_PUBLIC_E2B_DOMAIN,
+        domain: process.env.NEXT_PUBLIC_MORU_DOMAIN,
         headers,
       })
 

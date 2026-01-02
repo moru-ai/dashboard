@@ -25,4 +25,4 @@ export const WEBHOOK_EXAMPLE_PAYLOAD = `{
 // See docs for full schema.`
 
 export const WEBHOOK_SIGNATURE_VALIDATION_DOCS_URL =
-  'https://e2b.dev/docs/sandbox/lifecycle-events-webhooks#webhook-verification'
+  'https://moru.io/docs/sandbox/lifecycle-events-webhooks#webhook-verification'

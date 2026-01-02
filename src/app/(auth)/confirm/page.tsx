@@ -14,7 +14,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { useMemo, useTransition } from 'react'
 
 const OTP_TYPE_LABELS: Record<OtpType, string> = {
-  signup: 'Welcome to E2B',
+  signup: 'Welcome to Moru',
   recovery: 'Password Recovery',
   invite: 'Team Invitation',
   magiclink: 'Sign In',

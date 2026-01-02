@@ -1010,8 +1010,8 @@ function generateMockMetrics(sandboxes: Sandbox[]): MetricsResponse {
 }
 
 /**
- * This function replicates the back-end step calculation logic from e2b-dev/infra.
- * https://github.com/e2b-dev/infra/blob/19778a715e8df3adea83858c798582d289bd7159/packages/api/internal/handlers/sandbox_metrics.go#L90
+ * This function replicates the back-end step calculation logic from moru-ai/infra.
+ * https://github.com/moru-ai/infra/blob/19778a715e8df3adea83858c798582d289bd7159/packages/api/internal/handlers/sandbox_metrics.go#L90
  */
 export function calculateTeamMetricsStep(
   startMs: number,

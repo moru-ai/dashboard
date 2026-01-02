@@ -10,7 +10,7 @@ import { isVersionCompatible } from '@/lib/utils/version'
 import { useTRPC } from '@/trpc/client'
 import { DefaultTemplate, Template } from '@/types/api.types'
 import { AlertDialog } from '@/ui/alert-dialog'
-import { E2BBadge } from '@/ui/brand'
+import { MoruBadge } from '@/ui/brand'
 import HelpTooltip from '@/ui/help-tooltip'
 import { Button } from '@/ui/primitives/button'
 import {
@@ -31,11 +31,11 @@ import { useMemo, useState } from 'react'
 import ResourceUsage from '../../common/resource-usage'
 import { useDashboard } from '../../context'
 
-function E2BTemplateBadge() {
+function MoruTemplateBadge() {
   return (
-    <HelpTooltip trigger={<E2BBadge />}>
+    <HelpTooltip trigger={<MoruBadge />}>
       <p className="text-fg-secondary font-sans text-xs whitespace-break-spaces">
-        This template was created by E2B. It is one of the default templates
+        This template was created by Moru. It is one of the default templates
         every user has access to.
       </p>
     </HelpTooltip>
@@ -300,7 +300,7 @@ export function TemplateNameCell({
     >
       <span>{(getValue() as string) ?? 'N/A'}</span>
       {'isDefault' in row.original && row.original.isDefault && (
-        <E2BTemplateBadge />
+        <MoruTemplateBadge />
       )}
     </div>
   )

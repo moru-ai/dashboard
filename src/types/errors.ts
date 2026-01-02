@@ -1,6 +1,6 @@
 // Types
 
-export type E2BErrorCode =
+export type MoruErrorCode =
   | 'UNAUTHENTICATED'
   | 'UNAUTHORIZED'
   | 'INVALID_PARAMETERS'
@@ -9,12 +9,12 @@ export type E2BErrorCode =
   | 'UNKNOWN'
   | string
 
-export class E2BError extends Error {
-  public code: E2BErrorCode
+export class MoruError extends Error {
+  public code: MoruErrorCode
 
-  constructor(code: E2BErrorCode, message: string) {
+  constructor(code: MoruErrorCode, message: string) {
     super(message)
-    this.name = 'E2BError'
+    this.name = 'MoruError'
     this.code = code
   }
 }
@@ -22,21 +22,21 @@ export class E2BError extends Error {
 // Errors
 
 export const UnauthenticatedError = () =>
-  new E2BError('UNAUTHENTICATED', 'User not authenticated')
+  new MoruError('UNAUTHENTICATED', 'User not authenticated')
 
 export const UnauthorizedError = (message: string) =>
-  new E2BError('UNAUTHORIZED', message)
+  new MoruError('UNAUTHORIZED', message)
 
 export const InvalidApiKeyError = (message: string) =>
-  new E2BError('INVALID_API_KEY', message)
+  new MoruError('INVALID_API_KEY', message)
 
 export const InvalidParametersError = (message: string) =>
-  new E2BError('INVALID_PARAMETERS', message)
+  new MoruError('INVALID_PARAMETERS', message)
 
-export const ApiError = (message: string) => new E2BError('API_ERROR', message)
+export const ApiError = (message: string) => new MoruError('API_ERROR', message)
 
 export const UnknownError = (message?: string) =>
-  new E2BError(
+  new MoruError(
     'UNKNOWN',
     message ??
       'An Unexpected Error Occurred, please try again. If the problem persists, please contact support.'
