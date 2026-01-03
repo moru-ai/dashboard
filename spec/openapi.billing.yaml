@@ -408,7 +408,6 @@ components:
       required:
         - cost
         - paid
-        - url
         - date_created
       properties:
         cost:
@@ -420,7 +419,8 @@ components:
           description: Whether invoice is paid
         url:
           type: string
-          description: URL to view/pay invoice
+          nullable: true
+          description: URL to view/pay invoice (null for wire transfer records)
         date_created:
           type: string
           description: Creation date

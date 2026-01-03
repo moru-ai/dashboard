@@ -82,11 +82,13 @@ async function InvoicesTableContent({
           <TableCell>${invoice.cost.toFixed(2)}</TableCell>
           <TableCell>{invoice.paid ? 'Paid' : 'Pending'}</TableCell>
           <TableCell className="text-right">
-            <Button variant="muted" size="sm" asChild>
-              <Link href={invoice.url} target="_blank">
-                View Invoice
-              </Link>
-            </Button>
+            {invoice.url ? (
+              <Button variant="muted" size="sm" asChild>
+                <Link href={invoice.url} target="_blank">
+                  View Invoice
+                </Link>
+              </Button>
+            ) : null}
           </TableCell>
         </TableRow>
       ))}

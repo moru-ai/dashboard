@@ -378,8 +378,8 @@ export interface components {
             cost: number;
             /** @description Whether invoice is paid */
             paid: boolean;
-            /** @description URL to view/pay invoice */
-            url: string;
+            /** @description URL to view/pay invoice (null for wire transfer records) */
+            url?: string | null;
             /** @description Creation date */
             date_created: string;
         };
