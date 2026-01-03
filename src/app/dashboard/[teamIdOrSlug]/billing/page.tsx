@@ -1,3 +1,4 @@
+import { INCLUDE_PLAN_SETTINGS } from '@/configs/flags'
 import CustomerPortalLink from '@/features/dashboard/billing/customer-portal-link'
 import BillingInvoicesTable from '@/features/dashboard/billing/invoices-table'
 import { PlanSection } from '@/features/dashboard/billing/plan-section'
@@ -25,39 +26,44 @@ export default async function BillingPage({
 }) {
   const { teamIdOrSlug } = await params
 
-  const itemsRes = await getItems({ teamIdOrSlug })
-  const limitsRes = await getTeamLimits({ teamIdOrSlug })
+  let tierData = null
+  let addonData = null
 
-  // handle data loading errors
-  if (itemsRes.serverError) {
-    l.error(
-      {
-        key: 'billing_page:failed_to_load_items',
-        context: { serverError: itemsRes.serverError },
-      },
-      'billing_page: Failed to load billing items'
-    )
+  if (INCLUDE_PLAN_SETTINGS) {
+    const itemsRes = await getItems({ teamIdOrSlug })
+    const limitsRes = await getTeamLimits({ teamIdOrSlug })
+
+    // handle data loading errors
+    if (itemsRes.serverError) {
+      l.error(
+        {
+          key: 'billing_page:failed_to_load_items',
+          context: { serverError: itemsRes.serverError },
+        },
+        'billing_page: Failed to load billing items'
+      )
+    }
+
+    if (!itemsRes?.data || !limitsRes?.data) {
+      return (
+        <ErrorBoundary
+          error={
+            {
+              name: 'Billing Error',
+              message:
+                itemsRes?.serverError ??
+                'Failed to load billing information. Please contact support.',
+            } satisfies Error
+          }
+          description="Could not load billing information"
+        />
+      )
+    }
+
+    // extract and validate billing data
+    tierData = extractTierData(itemsRes.data)
+    addonData = extractAddonData(itemsRes.data, tierData.selected?.id)
   }
-
-  if (!itemsRes?.data || !limitsRes?.data) {
-    return (
-      <ErrorBoundary
-        error={
-          {
-            name: 'Billing Error',
-            message:
-              itemsRes?.serverError ??
-              'Failed to load billing information. Please contact support.',
-          } satisfies Error
-        }
-        description="Could not load billing information"
-      />
-    )
-  }
-
-  // extract and validate billing data
-  const tierData = extractTierData(itemsRes.data)
-  const addonData = extractAddonData(itemsRes.data, tierData.selected?.id)
 
   return (
     <Frame
@@ -66,26 +72,28 @@ export default async function BillingPage({
         frame: 'max-md:border-none',
       }}
     >
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Plan</CardTitle>
-          <CardDescription>
-            Manage your current plan and subscription details.
-          </CardDescription>
-        </CardHeader>
+      {INCLUDE_PLAN_SETTINGS && tierData && addonData && (
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Plan</CardTitle>
+            <CardDescription>
+              Manage your current plan and subscription details.
+            </CardDescription>
+          </CardHeader>
 
-        <CardContent>
-          <CustomerPortalLink className="bg-bg w-fit" />
+          <CardContent>
+            <CustomerPortalLink className="bg-bg w-fit" />
 
-          <PlanSection
-            tierData={tierData}
-            addonData={addonData}
-            limits={limitsRes.data}
-          />
-        </CardContent>
-      </Card>
+            <PlanSection
+              tierData={tierData}
+              addonData={addonData}
+              limits={{} as any}
+            />
+          </CardContent>
+        </Card>
+      )}
 
-      <Card className="w-full mt-6">
+      <Card className={INCLUDE_PLAN_SETTINGS ? 'w-full mt-6' : 'w-full'}>
         <CardHeader>
           <CardTitle>Billing History</CardTitle>
           <CardDescription>

@@ -5,6 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/ui/primitives/card'
+import { Button } from '@/ui/primitives/button'
+import { getSessionInsecure } from '@/server/auth/get-session'
 import BillingCreditsContent from '../billing/credits-content'
 
 interface CreditsCardProps {
@@ -12,10 +14,28 @@ interface CreditsCardProps {
   className?: string
 }
 
+function buildTopUpMailto(userEmail: string) {
+  const email = 'support@moru.io'
+  const subject = 'Credit Top Up Request'
+  const body = `Hi Moru Team,
+
+I would like to top up credits for my account.
+
+Account Email: ${userEmail}
+Amount: $[Please specify amount]
+
+Thank you!`
+
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
+
 export default async function CreditsCard({
   params,
   className,
 }: CreditsCardProps) {
+  const session = await getSessionInsecure()
+  const userEmail = session?.user?.email ?? ''
+
   return (
     <Card className={className}>
       <CardHeader>
@@ -25,8 +45,11 @@ export default async function CreditsCard({
           <br /> Usage costs are deducted from your credits.
         </CardDescription>
       </CardHeader>
-      <CardContent className="max-w-[500px] text-xs">
+      <CardContent className="flex items-center justify-between">
         <BillingCreditsContent params={params} />
+        <Button asChild variant="default" size="lg">
+          <a href={buildTopUpMailto(userEmail)}>Top Up</a>
+        </Button>
       </CardContent>
     </Card>
   )

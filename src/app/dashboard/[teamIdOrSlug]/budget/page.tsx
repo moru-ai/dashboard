@@ -1,3 +1,4 @@
+import { INCLUDE_BUDGET_SETTINGS } from '@/configs/flags'
 import CreditsCard from '@/features/dashboard/budget/credits-card'
 import UsageLimits from '@/features/dashboard/budget/usage-limits'
 import Frame from '@/ui/frame'
@@ -15,7 +16,7 @@ export default function BudgetPage({ params }: BudgetPageProps) {
       }}
     >
       <CreditsCard params={params} />
-      <UsageLimits params={params} />
+      {INCLUDE_BUDGET_SETTINGS && <UsageLimits params={params} />}
     </Frame>
   )
 }
