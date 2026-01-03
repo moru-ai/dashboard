@@ -1,8 +1,9 @@
 import type { paths as ArgusPaths } from '@/types/argus-api.types'
+import type { paths as BillingPaths } from '@/types/billing-api.types'
 import type { paths as InfraPaths } from '@/types/infra-api.types'
 import createClient from 'openapi-fetch'
 
-type CombinedPaths = InfraPaths & ArgusPaths
+type CombinedPaths = InfraPaths & ArgusPaths & BillingPaths
 
 export const infra = createClient<CombinedPaths>({
   baseUrl: process.env.INFRA_API_URL,

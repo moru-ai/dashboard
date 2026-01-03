@@ -1,0 +1,735 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: Moru Billing API
+
+servers:
+  - url: https://api.moru.io
+
+components:
+  securitySchemes:
+    # Generated code uses security schemas in alphabetical order.
+    # In order to check first the token, and then the team (so we can already use the user),
+    # there is a 1 and 2 present in the names of the security schemas.
+    Supabase1TokenAuth:
+      type: apiKey
+      in: header
+      name: X-Supabase-Token
+    Supabase2TeamAuth:
+      type: apiKey
+      in: header
+      name: X-Supabase-Team
+
+  parameters:
+    teamId:
+      name: teamId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    orderId:
+      name: orderId
+      in: path
+      required: true
+      schema:
+        type: string
+    limitType:
+      name: type
+      in: path
+      required: true
+      schema:
+        type: string
+        enum:
+          - limit_amount_gte
+          - alert_amount_gte
+
+  responses:
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    '401':
+      description: Authentication error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    '402':
+      description: Payment required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    '403':
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    '500':
+      description: Server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    '501':
+      description: Not implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+        message:
+          type: string
+          description: Error message
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - service
+      properties:
+        status:
+          type: string
+          description: Health status
+        service:
+          type: string
+          description: Service name
+
+    BillingLimit:
+      type: object
+      required:
+        - limit_amount_gte
+        - alert_amount_gte
+      properties:
+        limit_amount_gte:
+          type: integer
+          nullable: true
+          description: Spending limit threshold in cents
+        alert_amount_gte:
+          type: integer
+          nullable: true
+          description: Alert threshold in cents
+
+    BillingLimitUpdate:
+      type: object
+      properties:
+        limit_amount_gte:
+          type: integer
+          nullable: true
+          description: Spending limit threshold in cents
+        alert_amount_gte:
+          type: integer
+          nullable: true
+          description: Alert threshold in cents
+
+    CustomerPortalResponse:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          description: URL to redirect to (Stripe portal or mailto link)
+
+    DayUsage:
+      type: object
+      required:
+        - date
+        - sandbox_count
+        - cpu_hours
+        - ram_gib_hours
+        - price_for_ram
+        - price_for_cpu
+      properties:
+        date:
+          type: string
+          description: Date in YYYY-MM-DD format
+        sandbox_count:
+          type: integer
+          format: int64
+          description: Number of sandboxes created
+        cpu_hours:
+          type: number
+          format: double
+          description: Total CPU hours used
+        ram_gib_hours:
+          type: number
+          format: double
+          description: Total RAM GiB-hours used
+        price_for_ram:
+          type: number
+          format: double
+          description: Cost for RAM usage in dollars
+        price_for_cpu:
+          type: number
+          format: double
+          description: Cost for CPU usage in dollars
+
+    HourUsage:
+      type: object
+      required:
+        - timestamp
+        - sandbox_count
+        - cpu_hours
+        - ram_gib_hours
+        - price_for_ram
+        - price_for_cpu
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+          description: Unix timestamp in seconds
+        sandbox_count:
+          type: integer
+          format: int64
+          description: Number of sandboxes created
+        cpu_hours:
+          type: number
+          format: double
+          description: Total CPU hours used
+        ram_gib_hours:
+          type: number
+          format: double
+          description: Total RAM GiB-hours used
+        price_for_ram:
+          type: number
+          format: double
+          description: Cost for RAM usage in dollars
+        price_for_cpu:
+          type: number
+          format: double
+          description: Cost for CPU usage in dollars
+
+    UsageResponse:
+      type: object
+      required:
+        - credits
+        - day_usages
+        - hour_usages
+      properties:
+        credits:
+          type: number
+          format: double
+          description: Current credit balance in dollars
+        day_usages:
+          type: array
+          items:
+            $ref: '#/components/schemas/DayUsage'
+          description: Daily usage breakdown
+        hour_usages:
+          type: array
+          items:
+            $ref: '#/components/schemas/HourUsage'
+          description: Hourly usage breakdown (last 24 hours)
+
+    TierLimits:
+      type: object
+      required:
+        - sandbox_concurrency
+        - max_cpu
+        - max_ram_mib
+        - max_sandbox_duration_hours
+        - disk_size_mib
+      properties:
+        sandbox_concurrency:
+          type: integer
+          description: Maximum concurrent sandboxes
+        max_cpu:
+          type: integer
+          description: Maximum vCPUs per sandbox
+        max_ram_mib:
+          type: integer
+          description: Maximum RAM in MiB per sandbox
+        max_sandbox_duration_hours:
+          type: integer
+          description: Maximum sandbox duration in hours
+        disk_size_mib:
+          type: integer
+          description: Disk size in MiB per sandbox
+
+    TierInfo:
+      type: object
+      required:
+        - id
+        - name
+        - price_cents
+      properties:
+        id:
+          type: string
+          description: Tier identifier (e.g., base_v1, pro_v1)
+        name:
+          type: string
+          description: Display name (e.g., Hobby, Pro)
+        price_cents:
+          type: integer
+          description: Monthly price in cents (0 for pay-as-you-go)
+        limits:
+          $ref: '#/components/schemas/TierLimits'
+
+    AddonInfo:
+      type: object
+      required:
+        - id
+        - name
+        - price_cents
+      properties:
+        id:
+          type: string
+          description: Addon identifier
+        name:
+          type: string
+          description: Display name
+        price_cents:
+          type: integer
+          description: Price in cents
+        quantity:
+          type: integer
+          description: Quantity purchased (if applicable)
+
+    TeamAddons:
+      type: object
+      required:
+        - current
+        - available
+      properties:
+        current:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddonInfo'
+          description: Currently active addons
+        available:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddonInfo'
+          description: Available addons for purchase
+
+    TeamTiers:
+      type: object
+      required:
+        - current
+        - available
+      properties:
+        current:
+          type: string
+          description: Current tier ID
+        available:
+          type: array
+          items:
+            $ref: '#/components/schemas/TierInfo'
+          description: Available tiers
+
+    TeamItems:
+      type: object
+      required:
+        - tiers
+        - addons
+      properties:
+        tiers:
+          $ref: '#/components/schemas/TeamTiers'
+        addons:
+          $ref: '#/components/schemas/TeamAddons'
+
+    AddOnOrderItem:
+      type: object
+      required:
+        - name
+        - quantity
+      properties:
+        name:
+          type: string
+          description: Addon identifier
+        quantity:
+          type: integer
+          description: Quantity to purchase
+
+    AddOnOrderCreateRequest:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddOnOrderItem'
+
+    AddOnOrderCreateResponse:
+      type: object
+      required:
+        - id
+        - amount_due
+        - items
+      properties:
+        id:
+          type: string
+          description: Order ID
+        amount_due:
+          type: integer
+          description: Amount due in cents
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddOnOrderItem'
+
+    AddOnOrderConfirmResponse:
+      type: object
+      required:
+        - client_secret
+      properties:
+        client_secret:
+          type: string
+          description: Stripe client secret for payment confirmation
+
+    PaymentMethodsCustomerSession:
+      type: object
+      required:
+        - client_secret
+      properties:
+        client_secret:
+          type: string
+          description: Stripe customer session client secret
+
+    Invoice:
+      type: object
+      required:
+        - cost
+        - paid
+        - url
+        - date_created
+      properties:
+        cost:
+          type: number
+          format: double
+          description: Invoice amount
+        paid:
+          type: boolean
+          description: Whether invoice is paid
+        url:
+          type: string
+          description: URL to view/pay invoice
+        date_created:
+          type: string
+          description: Creation date
+
+    CreateTeamsResponse:
+      type: object
+      required:
+        - id
+        - slug
+      properties:
+        id:
+          type: string
+          description: Team ID
+        slug:
+          type: string
+          description: Team slug
+
+    CheckoutRequest:
+      type: object
+      required:
+        - teamID
+        - tierID
+      properties:
+        teamID:
+          type: string
+          description: Team ID
+        tierID:
+          type: string
+          description: Target tier ID
+
+paths:
+  /billing/health:
+    get:
+      operationId: healthCheck
+      description: Health check endpoint
+      tags: [health]
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /billing/v2/teams/{teamId}/usage:
+    get:
+      operationId: getUsage
+      description: Get usage and credit balance for a team
+      tags: [usage]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      parameters:
+        - $ref: '#/components/parameters/teamId'
+      responses:
+        '200':
+          description: Successfully returned usage data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /billing/teams/{teamId}/items:
+    get:
+      operationId: getItems
+      description: Get tiers and addons for a team
+      tags: [billing]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      parameters:
+        - $ref: '#/components/parameters/teamId'
+      responses:
+        '200':
+          description: Successfully returned team items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamItems'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /billing/teams/{teamId}/billing-limits:
+    get:
+      operationId: getBillingLimits
+      description: Get billing limits for a team
+      tags: [billing]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      parameters:
+        - $ref: '#/components/parameters/teamId'
+      responses:
+        '200':
+          description: Successfully returned billing limits
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingLimit'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+
+    patch:
+      operationId: updateBillingLimits
+      description: Update billing limits for a team
+      tags: [billing]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      parameters:
+        - $ref: '#/components/parameters/teamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingLimitUpdate'
+      responses:
+        '200':
+          description: Successfully updated billing limits
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /billing/teams/{teamId}/billing-limits/{type}:
+    delete:
+      operationId: deleteBillingLimit
+      description: Delete a specific billing limit
+      tags: [billing]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      parameters:
+        - $ref: '#/components/parameters/teamId'
+        - $ref: '#/components/parameters/limitType'
+      responses:
+        '200':
+          description: Successfully deleted billing limit
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /billing/checkouts:
+    post:
+      operationId: createCheckout
+      description: Create a checkout session (MVP returns mailto link)
+      tags: [checkout]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckoutRequest'
+      responses:
+        '200':
+          description: Successfully created checkout
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPortalResponse'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /billing/stripe/portal:
+    post:
+      operationId: stripePortal
+      description: Get Stripe customer portal URL (MVP returns mailto link)
+      tags: [checkout]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      responses:
+        '200':
+          description: Successfully got portal URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerPortalResponse'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /billing/teams/{teamId}/orders:
+    post:
+      operationId: createOrder
+      description: Create an addon order (not implemented in MVP)
+      tags: [orders]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      parameters:
+        - $ref: '#/components/parameters/teamId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOnOrderCreateRequest'
+      responses:
+        '200':
+          description: Successfully created order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOnOrderCreateResponse'
+        '501':
+          $ref: '#/components/responses/501'
+
+  /billing/teams/{teamId}/orders/{orderId}:
+    post:
+      operationId: confirmOrder
+      description: Confirm an addon order (not implemented in MVP)
+      tags: [orders]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      parameters:
+        - $ref: '#/components/parameters/teamId'
+        - $ref: '#/components/parameters/orderId'
+      responses:
+        '200':
+          description: Successfully confirmed order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddOnOrderConfirmResponse'
+        '501':
+          $ref: '#/components/responses/501'
+
+  /billing/teams/{teamId}/payment-methods/customer-session:
+    post:
+      operationId: getCustomerSession
+      description: Get Stripe customer session for payment methods (not implemented in MVP)
+      tags: [payment-methods]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      parameters:
+        - $ref: '#/components/parameters/teamId'
+      responses:
+        '200':
+          description: Successfully got customer session
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethodsCustomerSession'
+        '501':
+          $ref: '#/components/responses/501'
+
+  /billing/teams/{teamId}/invoices:
+    get:
+      operationId: getInvoices
+      description: Get invoices for a team
+      tags: [invoices]
+      security:
+        - Supabase1TokenAuth: []
+          Supabase2TeamAuth: []
+      parameters:
+        - $ref: '#/components/parameters/teamId'
+      responses:
+        '200':
+          description: Successfully returned invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/components/responses/401'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'

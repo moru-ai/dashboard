@@ -1,116 +1,27 @@
-import { ADDON_500_SANDBOXES_ID } from '@/features/dashboard/billing/constants'
+/**
+ * Billing types re-exported from generated OpenAPI types.
+ * This maintains backward compatibility - existing imports continue to work.
+ *
+ * Source of truth: billing/spec/openapi.yml
+ * Generated file: ./billing-api.types.ts
+ */
+import type { components } from './billing-api.types'
 
-interface Invoice {
-  cost: number
-  paid: boolean
-  url: string
-  date_created: string
-}
-
-interface BillingLimit {
-  limit_amount_gte: number | null
-  alert_amount_gte: number | null
-}
-
-interface CustomerPortalResponse {
-  url: string
-}
-
-interface UsageResponse {
-  credits: number
-  day_usages: {
-    date: string
-    sandbox_count: number
-    cpu_hours: number
-    ram_gib_hours: number
-    price_for_ram: number
-    price_for_cpu: number
-  }[]
-  hour_usages: {
-    timestamp: number
-    sandbox_count: number
-    cpu_hours: number
-    ram_gib_hours: number
-    price_for_ram: number
-    price_for_cpu: number
-  }[]
-}
-
-interface CreateTeamsResponse {
-  id: string
-  slug: string
-}
-
-interface AddOnOrderItem {
-  name: typeof ADDON_500_SANDBOXES_ID
-  quantity: number
-}
-
-interface AddOnOrderCreateResponse {
-  id: string
-  amount_due: number
-  items: AddOnOrderItem[]
-}
-
-interface AddOnOrderConfirmResponse {
-  client_secret: string
-}
-
-interface PaymentMethodsCustomerSession {
-  client_secret: string
-}
-
-interface TierLimits {
-  sandbox_concurrency: number
-  max_cpu: number
-  max_ram_mib: number
-  max_sandbox_duration_hours: number
-  disk_size_mib: number
-}
-
-interface TierInfo {
-  id: string
-  name: string
-  price_cents: number
-  limits?: TierLimits
-}
-
-interface AddonInfo {
-  id: string
-  name: string
-  price_cents: number
-  quantity?: number
-}
-
-interface TeamAddons {
-  current: AddonInfo[]
-  available: AddonInfo[]
-}
-
-interface TeamTiers {
-  current: string
-  available: TierInfo[]
-}
-
-interface TeamItems {
-  tiers: TeamTiers
-  addons: TeamAddons
-}
-
-export type {
-  AddonInfo,
-  AddOnOrderConfirmResponse,
-  AddOnOrderCreateResponse,
-  AddOnOrderItem,
-  BillingLimit,
-  CreateTeamsResponse,
-  CustomerPortalResponse,
-  Invoice,
-  PaymentMethodsCustomerSession,
-  TeamAddons,
-  TeamItems,
-  TeamTiers,
-  TierInfo,
-  TierLimits,
-  UsageResponse,
-}
+// Re-export all types with same names as before
+export type BillingLimit = components['schemas']['BillingLimit']
+export type CustomerPortalResponse = components['schemas']['CustomerPortalResponse']
+export type UsageResponse = components['schemas']['UsageResponse']
+export type DayUsage = components['schemas']['DayUsage']
+export type HourUsage = components['schemas']['HourUsage']
+export type TeamItems = components['schemas']['TeamItems']
+export type TeamTiers = components['schemas']['TeamTiers']
+export type TeamAddons = components['schemas']['TeamAddons']
+export type TierInfo = components['schemas']['TierInfo']
+export type TierLimits = components['schemas']['TierLimits']
+export type AddonInfo = components['schemas']['AddonInfo']
+export type AddOnOrderCreateResponse = components['schemas']['AddOnOrderCreateResponse']
+export type AddOnOrderConfirmResponse = components['schemas']['AddOnOrderConfirmResponse']
+export type AddOnOrderItem = components['schemas']['AddOnOrderItem']
+export type PaymentMethodsCustomerSession = components['schemas']['PaymentMethodsCustomerSession']
+export type Invoice = components['schemas']['Invoice']
+export type CreateTeamsResponse = components['schemas']['CreateTeamsResponse']
