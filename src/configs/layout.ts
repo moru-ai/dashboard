@@ -27,6 +27,26 @@ const DASHBOARD_LAYOUT_CONFIGS: Record<
     title: 'Sandboxes',
     type: 'custom',
   }),
+  '/dashboard/*/sandboxes/runs/*': (pathname) => {
+    const parts = pathname.split('/')
+    const teamIdOrSlug = parts[2]!
+    const sandboxId = parts.pop()!
+    const sandboxIdSliced = `${sandboxId.slice(0, 6)}...${sandboxId.slice(-6)}`
+
+    return {
+      title: [
+        {
+          label: 'Sandboxes',
+          href: PROTECTED_URLS.SANDBOXES_RUNS(teamIdOrSlug),
+        },
+        { label: `Run ${sandboxIdSliced}` },
+      ],
+      type: 'custom',
+      custom: {
+        includeHeaderBottomStyles: true,
+      },
+    }
+  },
   '/dashboard/*/sandboxes/**/*': () => ({
     title: 'Sandbox',
     type: 'custom',

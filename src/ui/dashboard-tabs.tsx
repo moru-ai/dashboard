@@ -13,6 +13,7 @@ export interface DashboardTabsProps {
   type: 'query' | 'path'
   children: Array<DashboardTabElement> | DashboardTabElement
   className?: string
+  defaultTabId?: string
 }
 
 // COMPONENT
@@ -22,6 +23,7 @@ function DashboardTabsComponent({
   type,
   children,
   className,
+  defaultTabId,
 }: DashboardTabsProps) {
   const searchParams = useSearchParams()
   const pathname = usePathname()
@@ -49,11 +51,15 @@ function DashboardTabsComponent({
 
   const activeTabId = useMemo(() => {
     if (type === 'query') {
-      const defaultTabId = tabs[0]?.id
-      return searchParams.get('tab') || defaultTabId
+      const fallbackTabId = defaultTabId ?? tabs[0]?.id
+      return searchParams.get('tab') || fallbackTabId
     }
-    return tabs.find((tab) => pathname.endsWith(tab.id))?.id || tabs[0]?.id
-  }, [type, tabs, searchParams, pathname])
+    return (
+      tabs.find((tab) => pathname.endsWith(tab.id))?.id ||
+      defaultTabId ||
+      tabs[0]?.id
+    )
+  }, [type, tabs, searchParams, pathname, defaultTabId])
 
   const tabsWithHrefs = useMemo(
     () => tabs.map((tab) => ({ ...tab, href: hrefForId(tab.id) })),
@@ -91,7 +97,8 @@ export const DashboardTabs = memo(DashboardTabsComponent, (prev, next) => {
   if (
     prev.layoutKey !== next.layoutKey ||
     prev.type !== next.type ||
-    prev.className !== next.className
+    prev.className !== next.className ||
+    prev.defaultTabId !== next.defaultTabId
   ) {
     return false
   }

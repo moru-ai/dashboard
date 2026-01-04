@@ -22,16 +22,20 @@ export const PROTECTED_URLS = {
   MEMBERS: (teamIdOrSlug: string) => `/dashboard/${teamIdOrSlug}/members`,
 
   SANDBOXES: (teamIdOrSlug: string) =>
-    `/dashboard/${teamIdOrSlug}/sandboxes?tab=monitoring`,
+    `/dashboard/${teamIdOrSlug}/sandboxes?tab=runs`,
   SANDBOXES_MONITORING: (teamIdOrSlug: string) =>
     `/dashboard/${teamIdOrSlug}/sandboxes?tab=monitoring`,
   SANDBOXES_LIST: (teamIdOrSlug: string) =>
     `/dashboard/${teamIdOrSlug}/sandboxes?tab=list`,
+  SANDBOXES_RUNS: (teamIdOrSlug: string) =>
+    `/dashboard/${teamIdOrSlug}/sandboxes?tab=runs`,
 
   SANDBOX: (teamIdOrSlug: string, sandboxId: string) =>
     `/dashboard/${teamIdOrSlug}/sandboxes/${sandboxId}`,
   SANDBOX_INSPECT: (teamIdOrSlug: string, sandboxId: string) =>
     `/dashboard/${teamIdOrSlug}/sandboxes/${sandboxId}/inspect`,
+  SANDBOX_LOGS: (teamIdOrSlug: string, sandboxId: string) =>
+    `/dashboard/${teamIdOrSlug}/sandboxes/runs/${sandboxId}`,
 
   WEBHOOKS: (teamIdOrSlug: string) => `/dashboard/${teamIdOrSlug}/webhooks`,
 

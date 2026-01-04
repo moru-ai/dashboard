@@ -342,9 +342,12 @@ export interface paths {
       parameters: {
         query?: {
           /** @description Starting timestamp of the logs that should be returned in milliseconds */
-          start?: number
+          cursor?: number
           /** @description Maximum number of logs that should be returned */
           limit?: number
+          direction?: components['schemas']['LogsDirection']
+          /** @description Filter by event type (stdout or stderr). If not specified, returns all logs. */
+          eventType?: components['schemas']['SandboxLogEventType']
         }
         header?: never
         path: {
@@ -1690,7 +1693,7 @@ export interface components {
       timestamp: string
       /** @description Log message content */
       message: string
-      level: components['schemas']['LogLevel']
+      eventType: components['schemas']['SandboxLogEventType']
       fields: {
         [key: string]: string
       }
@@ -2181,10 +2184,15 @@ export interface components {
       url?: string
     }
     /**
-     * @description State of the sandbox
+     * @description Log level for build logs
      * @enum {string}
      */
     LogLevel: 'debug' | 'info' | 'warn' | 'error'
+    /**
+     * @description Type of sandbox log event (stdout or stderr)
+     * @enum {string}
+     */
+    SandboxLogEventType: 'stdout' | 'stderr'
     BuildLogEntry: {
       /**
        * Format: date-time
