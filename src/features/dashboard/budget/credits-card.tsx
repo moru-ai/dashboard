@@ -1,3 +1,5 @@
+import { getSessionInsecure } from '@/server/auth/get-session'
+import { Button } from '@/ui/primitives/button'
 import {
   Card,
   CardContent,
@@ -5,8 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/ui/primitives/card'
-import { Button } from '@/ui/primitives/button'
-import { getSessionInsecure } from '@/server/auth/get-session'
 import BillingCreditsContent from '../billing/credits-content'
 
 interface CreditsCardProps {
