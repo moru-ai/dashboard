@@ -9,6 +9,7 @@ import { Skeleton } from '@/ui/primitives/skeleton'
 import { Ban } from 'lucide-react'
 import { DetailsItem, DetailsRow } from '../../layouts/details-row'
 import { RanFor, StartedAt, Template } from './header-cells'
+import KillButtonRuns from './kill-button'
 
 interface SandboxLogsHeaderProps {
   runDetails: SandboxRunDetailsDTO | undefined
@@ -26,8 +27,9 @@ export default function SandboxLogsHeader({
 
   return (
     <header className="flex flex-col gap-6">
-      <DetailsRow>
-        <DetailsItem label="Sandbox ID">
+      <div className="flex items-start justify-between">
+        <DetailsRow className="flex-1">
+          <DetailsItem label="Sandbox ID">
           <CopyButtonInline
             value={sandboxId}
             className="font-mono prose-table-numeric text-fg-secondary"
@@ -64,7 +66,13 @@ export default function SandboxLogsHeader({
             />
           )}
         </DetailsItem>
-      </DetailsRow>
+        </DetailsRow>
+        <KillButtonRuns
+          teamIdOrSlug={teamIdOrSlug}
+          sandboxId={sandboxId}
+          isRunning={isRunning}
+        />
+      </div>
 
       <StatusBanner
         status={runDetails?.status}
