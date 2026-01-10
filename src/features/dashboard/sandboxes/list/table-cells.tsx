@@ -1,5 +1,6 @@
 'use client'
 
+import { SWR_KEYS } from '@/configs/keys'
 import { PROTECTED_URLS } from '@/configs/urls'
 import ResourceUsage from '@/features/dashboard/common/resource-usage'
 import { useTemplateTableStore } from '@/features/dashboard/templates/list/stores/table-store'
@@ -30,6 +31,7 @@ import { ArrowUpRight, MoreVertical, Trash2 } from 'lucide-react'
 import { useAction } from 'next-safe-action/hooks'
 import { useRouter } from 'next/navigation'
 import React, { useMemo } from 'react'
+import { useSWRConfig } from 'swr'
 import { useDashboard } from '../../context'
 import { useSandboxMetricsStore } from './stores/metrics-store'
 import { SandboxWithMetrics } from './table-config'
@@ -45,6 +47,7 @@ export function ActionsCell({ row }: CellContext<SandboxWithMetrics, unknown>) {
   const { team } = useDashboard()
   const router = useRouter()
   const { toast } = useToast()
+  const { mutate } = useSWRConfig()
 
   const { execute: executeKillSandbox, isExecuting: isKilling } = useAction(
     killSandboxAction,
@@ -54,6 +57,8 @@ export function ActionsCell({ row }: CellContext<SandboxWithMetrics, unknown>) {
           defaultSuccessToast(`Sandbox ${sandbox.sandboxID} has been killed.`)
         )
         router.refresh()
+        // Invalidate SWR team metrics cache to update the concurrent sandboxes counter
+        mutate(SWR_KEYS.TEAM_METRICS_RECENT(team.id))
       },
       onError: ({ error }) => {
         toast(

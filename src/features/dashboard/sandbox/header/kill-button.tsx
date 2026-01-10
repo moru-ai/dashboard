@@ -1,5 +1,6 @@
 'use client'
 
+import { SWR_KEYS } from '@/configs/keys'
 import { killSandboxAction } from '@/server/sandboxes/sandbox-actions'
 import { AlertPopover } from '@/ui/alert-popover'
 import { Button } from '@/ui/primitives/button'
@@ -7,6 +8,7 @@ import { TrashIcon } from '@/ui/primitives/icons'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { useSWRConfig } from 'swr'
 import { useDashboard } from '../../context'
 import { useSandboxContext } from '../context'
 
@@ -18,12 +20,15 @@ export default function KillButton({ className }: KillButtonProps) {
   const [open, setOpen] = useState(false)
   const { sandboxInfo, refetchSandboxInfo, isRunning } = useSandboxContext()
   const { team } = useDashboard()
+  const { mutate } = useSWRConfig()
 
   const { execute, isExecuting } = useAction(killSandboxAction, {
     onSuccess: async () => {
       toast.success('Sandbox killed successfully')
       setOpen(false)
       refetchSandboxInfo()
+      // Invalidate SWR team metrics cache to update the concurrent sandboxes counter
+      mutate(SWR_KEYS.TEAM_METRICS_RECENT(team.id))
     },
     onError: ({ error }) => {
       toast.error(

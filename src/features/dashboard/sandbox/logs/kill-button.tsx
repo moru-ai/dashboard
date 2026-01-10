@@ -1,5 +1,6 @@
 'use client'
 
+import { SWR_KEYS } from '@/configs/keys'
 import { killSandboxAction } from '@/server/sandboxes/sandbox-actions'
 import { AlertPopover } from '@/ui/alert-popover'
 import { Button } from '@/ui/primitives/button'
@@ -8,6 +9,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { useSWRConfig } from 'swr'
+import { useDashboard } from '../../context'
 
 interface KillButtonRunsProps {
   teamIdOrSlug: string
@@ -24,6 +27,8 @@ export default function KillButtonRuns({
 }: KillButtonRunsProps) {
   const [open, setOpen] = useState(false)
   const queryClient = useQueryClient()
+  const { mutate } = useSWRConfig()
+  const { team } = useDashboard()
 
   const { execute, isExecuting } = useAction(killSandboxAction, {
     onSuccess: async () => {
@@ -37,6 +42,8 @@ export default function KillButtonRuns({
       queryClient.invalidateQueries({
         queryKey: [['sandboxRuns', 'list']],
       })
+      // Invalidate SWR team metrics cache to update the concurrent sandboxes counter
+      mutate(SWR_KEYS.TEAM_METRICS_RECENT(team.id))
     },
     onError: ({ error }) => {
       toast.error(
