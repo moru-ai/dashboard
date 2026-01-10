@@ -29,9 +29,13 @@ export default function KillButtonRuns({
     onSuccess: async () => {
       toast.success('Sandbox killed successfully')
       setOpen(false)
-      // Invalidate the sandbox runs query to refetch
+      // Invalidate the sandbox runs queries to refetch
       queryClient.invalidateQueries({
         queryKey: [['sandboxRuns', 'details'], { input: { teamIdOrSlug, sandboxId } }],
+      })
+      // Also invalidate the list so the runs table updates when navigating back
+      queryClient.invalidateQueries({
+        queryKey: [['sandboxRuns', 'list']],
       })
     },
     onError: ({ error }) => {
