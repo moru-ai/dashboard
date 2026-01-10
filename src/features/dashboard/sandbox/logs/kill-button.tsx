@@ -33,13 +33,17 @@ export default function KillButtonRuns({
     onSuccess: async () => {
       toast.success('Sandbox killed successfully')
       setOpen(false)
-      // Invalidate the sandbox runs queries to refetch
-      queryClient.invalidateQueries({
+      // Refetch the sandbox runs queries
+      queryClient.refetchQueries({
         queryKey: [['sandboxRuns', 'details'], { input: { teamIdOrSlug, sandboxId } }],
       })
-      // Also invalidate the list so the runs table updates when navigating back
-      queryClient.invalidateQueries({
+      // Also refetch the list so the runs table updates when navigating back
+      queryClient.refetchQueries({
         queryKey: [['sandboxRuns', 'list']],
+      })
+      // Refetch the main sandboxes list
+      queryClient.refetchQueries({
+        queryKey: [['sandboxes', 'getSandboxes']],
       })
       // Invalidate SWR team metrics cache to update the concurrent sandboxes counter
       // Use filter function to match all team metrics keys (with or without timeframe params)

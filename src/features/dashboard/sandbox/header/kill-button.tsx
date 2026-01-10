@@ -4,6 +4,7 @@ import { killSandboxAction } from '@/server/sandboxes/sandbox-actions'
 import { AlertPopover } from '@/ui/alert-popover'
 import { Button } from '@/ui/primitives/button'
 import { TrashIcon } from '@/ui/primitives/icons'
+import { useQueryClient } from '@tanstack/react-query'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -20,12 +21,17 @@ export default function KillButton({ className }: KillButtonProps) {
   const { sandboxInfo, refetchSandboxInfo, isRunning } = useSandboxContext()
   const { team } = useDashboard()
   const { mutate } = useSWRConfig()
+  const queryClient = useQueryClient()
 
   const { execute, isExecuting } = useAction(killSandboxAction, {
     onSuccess: async () => {
       toast.success('Sandbox killed successfully')
       setOpen(false)
       refetchSandboxInfo()
+      // Refetch the main sandboxes list
+      queryClient.refetchQueries({
+        queryKey: [['sandboxes', 'getSandboxes']],
+      })
       // Invalidate SWR team metrics cache to update the concurrent sandboxes counter
       // Use filter function to match all team metrics keys (with or without timeframe params)
       mutate(
