@@ -1,6 +1,7 @@
 'use client'
 
 import { killSandboxAction } from '@/server/sandboxes/sandbox-actions'
+import { useTRPC } from '@/trpc/client'
 import { AlertPopover } from '@/ui/alert-popover'
 import { Button } from '@/ui/primitives/button'
 import { TrashIcon } from '@/ui/primitives/icons'
@@ -21,6 +22,7 @@ export default function KillButton({ className }: KillButtonProps) {
   const { sandboxInfo, refetchSandboxInfo, isRunning } = useSandboxContext()
   const { team } = useDashboard()
   const { mutate } = useSWRConfig()
+  const trpc = useTRPC()
   const queryClient = useQueryClient()
 
   const { execute, isExecuting } = useAction(killSandboxAction, {
@@ -30,7 +32,7 @@ export default function KillButton({ className }: KillButtonProps) {
       refetchSandboxInfo()
       // Refetch the main sandboxes list
       queryClient.refetchQueries({
-        queryKey: [['sandboxes', 'getSandboxes']],
+        queryKey: trpc.sandboxes.getSandboxes.queryKey({ teamIdOrSlug: team.id }),
       })
       // Invalidate SWR team metrics cache to update the concurrent sandboxes counter
       // Use filter function to match all team metrics keys (with or without timeframe params)
