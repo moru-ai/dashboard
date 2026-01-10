@@ -1,6 +1,5 @@
 'use client'
 
-import { SWR_KEYS } from '@/configs/keys'
 import { PROTECTED_URLS } from '@/configs/urls'
 import ResourceUsage from '@/features/dashboard/common/resource-usage'
 import { useTemplateTableStore } from '@/features/dashboard/templates/list/stores/table-store'
@@ -58,7 +57,11 @@ export function ActionsCell({ row }: CellContext<SandboxWithMetrics, unknown>) {
         )
         router.refresh()
         // Invalidate SWR team metrics cache to update the concurrent sandboxes counter
-        mutate(SWR_KEYS.TEAM_METRICS_RECENT(team.id))
+        // Use filter function to match all team metrics keys (with or without timeframe params)
+        mutate(
+          (key) =>
+            Array.isArray(key) && key[0] === `/api/teams/${team.id}/metrics`
+        )
       },
       onError: ({ error }) => {
         toast(

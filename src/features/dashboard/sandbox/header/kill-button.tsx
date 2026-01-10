@@ -1,6 +1,5 @@
 'use client'
 
-import { SWR_KEYS } from '@/configs/keys'
 import { killSandboxAction } from '@/server/sandboxes/sandbox-actions'
 import { AlertPopover } from '@/ui/alert-popover'
 import { Button } from '@/ui/primitives/button'
@@ -28,7 +27,11 @@ export default function KillButton({ className }: KillButtonProps) {
       setOpen(false)
       refetchSandboxInfo()
       // Invalidate SWR team metrics cache to update the concurrent sandboxes counter
-      mutate(SWR_KEYS.TEAM_METRICS_RECENT(team.id))
+      // Use filter function to match all team metrics keys (with or without timeframe params)
+      mutate(
+        (key) =>
+          Array.isArray(key) && key[0] === `/api/teams/${team.id}/metrics`
+      )
     },
     onError: ({ error }) => {
       toast.error(
