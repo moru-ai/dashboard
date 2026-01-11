@@ -70,8 +70,8 @@
   --icon-tertiary: #707070;
   --icon-inverted: #ffffff;
 
-  --accent-main-highlight: #e56f00;
-  --accent-main-bg: #e56f0029;
+  --accent-main-highlight: #954535;
+  --accent-main-bg: #95453529;
 
   --accent-positive-highlight: #00a670;
   --accent-positive-bg: #00a67029;
@@ -101,7 +101,7 @@
   --shadow: hsl(0 0% 90%);
   --shadow-strength: 0.3;
 
-  --graph-area-accent-main-from: rgba(229, 111, 0, 0.16);
+  --graph-area-accent-main-from: rgba(149, 69, 53, 0.16);
   --graph-area-accent-main-to: rgba(250, 250, 250, 0.16);
 
   --graph-area-accent-positive-from: rgba(
@@ -169,8 +169,8 @@
   --icon-tertiary: #848484;
   --icon-inverted: #0a0a0a;
 
-  --accent-main-highlight: #ff8800;
-  --accent-main-bg: rgba(255, 136, 0, 0.16);
+  --accent-main-highlight: #B5655A;
+  --accent-main-bg: rgba(149, 69, 53, 0.16);
 
   --accent-positive-highlight: #00d992;
   --accent-positive-bg: rgba(0, 217, 146, 0.16);
@@ -200,7 +200,7 @@
   --shadow: hsl(0 0% 3%);
   --shadow-strength: 0.2;
 
-  --graph-area-accent-main-from: rgba(255, 136, 0, 0.22);
+  --graph-area-accent-main-from: rgba(181, 101, 90, 0.22);
   --graph-area-accent-main-to: rgba(10, 10, 10, 0.2);
 
   --graph-area-accent-positive-from: rgba(
