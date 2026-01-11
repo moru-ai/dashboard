@@ -81,6 +81,7 @@ export const sandboxRunsRouter = createTRPCRouter({
           timestampUnix: new Date(log.timestamp).getTime(),
           eventType: log.eventType,
           message: log.message,
+          fields: log.fields,
         })) ?? []
 
       const hasMore = logs.length === 100
@@ -120,6 +121,7 @@ export const sandboxRunsRouter = createTRPCRouter({
           timestampUnix: new Date(log.timestamp).getTime(),
           eventType: log.eventType,
           message: log.message,
+          fields: log.fields,
         })) ?? []
 
       const newestLog = logs[logs.length - 1]

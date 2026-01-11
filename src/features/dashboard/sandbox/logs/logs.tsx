@@ -346,6 +346,7 @@ interface SandboxLogDTO {
   timestampUnix: number
   eventType: string
   message: string
+  fields?: Record<string, string>
 }
 
 interface VirtualizedLogsBodyProps {
@@ -637,13 +638,17 @@ function LogRow({ log, virtualRow, virtualizer, startedAt }: LogRowProps) {
           width: COLUMN_WIDTHS_PX.eventType,
         }}
       >
-        <EventTypeBadge eventType={log.eventType} />
+        <EventTypeBadge eventType={log.eventType} fields={log.fields} />
       </TableCell>
       <TableCell
         className="py-0 px-0"
         style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}
       >
-        <Message message={log.message} />
+        <Message
+          message={log.message}
+          eventType={log.eventType}
+          fields={log.fields}
+        />
       </TableCell>
     </TableRow>
   )

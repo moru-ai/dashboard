@@ -11,6 +11,7 @@ interface SandboxLogDTO {
   timestampUnix: number
   eventType: string
   message: string
+  fields?: Record<string, string>
 }
 
 interface SandboxLogsParams {
