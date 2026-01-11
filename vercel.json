@@ -15,71 +15,16 @@
       ],
       "destination": "/docs?ref=sdk-missing-api-key&reason=",
       "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/docs",
+      "destination": "https://moru.mintlify.dev/docs"
     },
     {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "blog.moru.io"
-        }
-      ],
-      "destination": "https://moru.io/blog",
-      "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "blog.moru.io"
-        }
-      ],
-      "destination": "https://moru.io/blog/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/log/:path*",
-      "destination": "https://moru.io/blog/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/blog/log/:path*",
-      "destination": "https://moru.io/blog/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "changelog.moru.io"
-        }
-      ],
-      "destination": "https://moru.io/changelog",
-      "permanent": true
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "docs.moru.io"
-        }
-      ],
-      "destination": "https://moru.io/docs",
-      "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "docs.moru.io"
-        }
-      ],
-      "destination": "https://moru.io/docs/:path*",
-      "permanent": true
+      "source": "/docs/:match*",
+      "destination": "https://moru.mintlify.dev/docs/:match*"
     }
   ]
 }
