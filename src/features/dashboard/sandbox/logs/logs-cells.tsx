@@ -36,7 +36,9 @@ export const EventTypeBadge = ({ eventType, fields }: EventTypeBadgeProps) => {
   if (eventType === 'process_end' && fields?.process_result) {
     try {
       const result = JSON.parse(fields.process_result)
-      if (result.ExitCode === 0) {
+      // Field is snake_case from protobuf, defaults to 0 if omitted
+      const exitCode = result.exit_code ?? 0
+      if (exitCode === 0) {
         badgeProps = { variant: 'positive' }
       } else {
         badgeProps = { variant: 'error' }
@@ -113,8 +115,9 @@ export const Message = ({ message, eventType, fields }: MessageProps) => {
     if (fields?.process_result) {
       try {
         const result = JSON.parse(fields.process_result)
-        exitCode = result.ExitCode
-        exitError = result.Error
+        // Field is snake_case from protobuf, defaults to 0 if omitted
+        exitCode = result.exit_code ?? 0
+        exitError = result.error
       } catch {
         // Fallback to showing raw message
       }

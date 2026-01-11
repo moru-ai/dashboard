@@ -291,11 +291,10 @@ function EventTypeFilter({
         if (log.eventType === 'process_end' && log.fields?.process_result) {
           try {
             const result = JSON.parse(log.fields.process_result)
-            const exitCode = result.ExitCode
-            const exitError = result.Error
-            if (exitCode !== undefined) {
-              return exitError ? `exit ${exitCode} - ${exitError}` : `exit ${exitCode}`
-            }
+            // Field is snake_case from protobuf, defaults to 0 if omitted
+            const exitCode = result.exit_code ?? 0
+            const exitError = result.error
+            return exitError ? `exit ${exitCode} - ${exitError}` : `exit ${exitCode}`
           } catch {
             // Fallback to message
           }
