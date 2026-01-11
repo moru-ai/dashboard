@@ -61,5 +61,5 @@ interface MessageProps {
 }
 
 export const Message = ({ message }: MessageProps) => {
-  return <span className="prose-body whitespace-nowrap">{message}</span>
+  return <span className="prose-body whitespace-pre-wrap">{message}</span>
 }
