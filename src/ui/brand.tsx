@@ -19,7 +19,6 @@ export const MoruLogo = ({
 
 export const MoruBadge = ({ className, ...props }: BadgeProps) => (
   <Badge className={className} variant="default" {...props}>
-    BY
-    <MoruLogo className="size-3" />
+    By Moru
   </Badge>
 )
