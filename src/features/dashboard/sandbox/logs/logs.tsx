@@ -617,7 +617,7 @@ function LogRow({ log, virtualRow, virtualizer, startedAt }: LogRowProps) {
       </TableCell>
       <TableCell
         className="py-0 px-0"
-        style={{ display: 'flex', alignItems: 'flex-start' }}
+        style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}
       >
         <Message message={log.message} />
       </TableCell>

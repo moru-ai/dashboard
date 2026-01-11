@@ -61,5 +61,7 @@ interface MessageProps {
 }
 
 export const Message = ({ message }: MessageProps) => {
-  return <span className="prose-body whitespace-pre-wrap">{message}</span>
+  // Replace newlines with visible separator for single-line log display
+  const singleLineMessage = message.replace(/\n/g, ' ↵ ')
+  return <span className="prose-body whitespace-nowrap">{singleLineMessage}</span>
 }
