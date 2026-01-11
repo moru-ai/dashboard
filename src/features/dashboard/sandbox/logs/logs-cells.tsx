@@ -32,11 +32,13 @@ export const EventTypeBadge = ({ eventType, fields }: EventTypeBadgeProps) => {
     variant: 'default',
   }
 
-  // For process_end, use error variant if exit code > 0
+  // For process_end, use success/error variant based on exit code
   if (eventType === 'process_end' && fields?.process_result) {
     try {
       const result = JSON.parse(fields.process_result)
-      if (result.ExitCode !== 0) {
+      if (result.ExitCode === 0) {
+        badgeProps = { variant: 'positive' }
+      } else {
         badgeProps = { variant: 'error' }
       }
     } catch {
