@@ -66,6 +66,21 @@ function deduplicateLogs(
   return newLogs.filter((log) => !existingKeys.has(getLogKey(log)))
 }
 
+function expandLogsWithNewlines(logs: SandboxLogDTO[]): SandboxLogDTO[] {
+  return logs.flatMap((log) => {
+    const lines = log.message.split('\n')
+    if (lines.length === 1) {
+      return [log]
+    }
+    return lines
+      .filter((line) => line.length > 0)
+      .map((line) => ({
+        ...log,
+        message: line,
+      }))
+  })
+}
+
 const initialState: SandboxLogsState = {
   logs: [],
   hasMoreBackwards: true,
@@ -134,7 +149,7 @@ export const createSandboxLogsStore = () =>
           }
 
           set((s) => {
-            s.logs = result.logs
+            s.logs = expandLogsWithNewlines(result.logs)
             s.hasMoreBackwards = result.nextCursor !== null
             s.backwardsCursor = result.nextCursor
             s.isLoadingBackwards = false
@@ -188,7 +203,8 @@ export const createSandboxLogsStore = () =>
           }
 
           set((s) => {
-            const uniqueNewLogs = deduplicateLogs(s.logs, result.logs)
+            const expandedLogs = expandLogsWithNewlines(result.logs)
+            const uniqueNewLogs = deduplicateLogs(s.logs, expandedLogs)
             s.logs = [...uniqueNewLogs, ...s.logs]
             s.hasMoreBackwards = result.nextCursor !== null
             s.backwardsCursor = result.nextCursor
@@ -240,7 +256,8 @@ export const createSandboxLogsStore = () =>
           let uniqueLogsCount = 0
 
           set((s) => {
-            const uniqueNewLogs = deduplicateLogs(s.logs, result.logs)
+            const expandedLogs = expandLogsWithNewlines(result.logs)
+            const uniqueNewLogs = deduplicateLogs(s.logs, expandedLogs)
             uniqueLogsCount = uniqueNewLogs.length
             if (uniqueLogsCount > 0) {
               s.logs = [...s.logs, ...uniqueNewLogs]
