@@ -10,7 +10,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/ui/primitives/dropdown-menu'
-import { ArrowDownIcon, ListIcon } from '@/ui/primitives/icons'
+import { ArrowDownIcon, CopyIcon, ListIcon } from '@/ui/primitives/icons'
 import { Loader } from '@/ui/primitives/loader'
 import {
   Table,
@@ -33,6 +33,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useClipboard } from '@/lib/hooks/use-clipboard'
 import { EventTypeBadge, Message, Timestamp } from './logs-cells'
 import { type SandboxLogEventTypeFilter } from './logs-filter-params'
 import useLogFilters from './use-log-filters'
@@ -149,7 +150,7 @@ function LogsContent({
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden relative gap-3">
-      <EventTypeFilter eventType={eventType} onEventTypeChange={setEventType} />
+      <EventTypeFilter eventType={eventType} onEventTypeChange={setEventType} logs={logs} />
 
       <div ref={scrollContainerRef} className="min-h-0 flex-1 overflow-auto">
         <Table style={{ display: 'grid', minWidth: 'min-content' }}>
@@ -255,18 +256,31 @@ function EmptyBody() {
   )
 }
 
+interface LogEntry {
+  message: string
+}
+
 interface EventTypeFilterProps {
   eventType: SandboxLogEventTypeFilter | null
   onEventTypeChange: (eventType: SandboxLogEventTypeFilter | null) => void
+  logs?: LogEntry[]
 }
 
 function EventTypeFilter({
   eventType,
   onEventTypeChange,
+  logs,
 }: EventTypeFilterProps) {
+  const [wasCopied, copy] = useClipboard()
   const selectedLabel = eventType
     ? EVENT_TYPE_OPTIONS.find((o) => o.value === eventType)?.label
     : 'All'
+
+  const handleCopyAll = () => {
+    if (!logs || logs.length === 0) return
+    const text = logs.map((log) => log.message).join('\n')
+    copy(text)
+  }
 
   return (
     <div className="flex w-full min-h-0 justify-between gap-3">
@@ -296,6 +310,16 @@ function EventTypeFilter({
           </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+      {logs && logs.length > 0 && (
+        <Button
+          variant="outline"
+          className="font-sans w-min normal-case prose-body-highlight h-9"
+          onClick={handleCopyAll}
+        >
+          <CopyIcon className="size-4" />
+          {wasCopied ? 'Copied!' : 'Copy all'}
+        </Button>
+      )}
     </div>
   )
 }
