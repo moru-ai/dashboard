@@ -258,6 +258,8 @@ function EmptyBody() {
 
 interface LogEntry {
   message: string
+  eventType: string
+  fields?: Record<string, string>
 }
 
 interface EventTypeFilterProps {
@@ -278,7 +280,29 @@ function EventTypeFilter({
 
   const handleCopyAll = () => {
     if (!logs || logs.length === 0) return
-    const text = logs.map((log) => log.message).join('\n')
+    const text = logs
+      .map((log) => {
+        // Format process_start as "$ {command}"
+        if (log.eventType === 'process_start') {
+          const command = log.fields?.command || log.message
+          return `$ ${command}`
+        }
+        // Format process_end as "exit {code}"
+        if (log.eventType === 'process_end' && log.fields?.process_result) {
+          try {
+            const result = JSON.parse(log.fields.process_result)
+            const exitCode = result.ExitCode
+            const exitError = result.Error
+            if (exitCode !== undefined) {
+              return exitError ? `exit ${exitCode} - ${exitError}` : `exit ${exitCode}`
+            }
+          } catch {
+            // Fallback to message
+          }
+        }
+        return log.message
+      })
+      .join('\n')
     copy(text)
   }
 
