@@ -47,12 +47,11 @@ async function handleCLIAuth(
 }
 
 // UI Components
-function SuccessState({ email }: { email?: string }) {
+function SuccessState() {
   return (
     <div className="text-center">
       <CheckCircle2Icon className="text-brand-400 mx-auto h-12 w-12" />
       <h1 className="mt-4">Successfully connected</h1>
-      {email && <p className="text-fg-secondary mt-1">{email}</p>}
       <p className="text-fg-tertiary mt-6">
         Your CLI is now linked. You can close this page.
       </p>
@@ -81,7 +80,7 @@ export default async function CLIAuthPage({
 
   // Success state - CLI received token
   if (state === 'success') {
-    return <SuccessState email={user?.email} />
+    return <SuccessState />
   }
 
   // Validate redirect URL
