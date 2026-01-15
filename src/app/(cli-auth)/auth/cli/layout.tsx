@@ -25,9 +25,30 @@ function TerminalMock() {
       </div>
 
       {/* Terminal content */}
-      <div className="p-6 font-mono text-sm">
-        <div className="whitespace-nowrap text-fg-secondary">
-          <span className="text-green-400">$</span> moru sandbox run base python3 -c "print('Hello')"
+      <div className="space-y-4 p-6 font-mono text-sm">
+        <div>
+          <div className="text-fg-tertiary"># Login</div>
+          <div className="text-fg-secondary">
+            <span className="text-green-400">$</span> moru auth login
+          </div>
+        </div>
+        <div>
+          <div className="text-fg-tertiary"># Create sandbox and run command</div>
+          <div className="text-fg-secondary">
+            <span className="text-green-400">$</span> moru sandbox run base echo "Hello from Moru!"
+          </div>
+        </div>
+        <div>
+          <div className="text-fg-tertiary"># List sandboxes</div>
+          <div className="text-fg-secondary">
+            <span className="text-green-400">$</span> moru sandbox list
+          </div>
+        </div>
+        <div>
+          <div className="text-fg-tertiary"># View logs of the sandbox</div>
+          <div className="text-fg-secondary">
+            <span className="text-green-400">$</span> moru sandbox logs &lt;id&gt;
+          </div>
         </div>
       </div>
     </div>
