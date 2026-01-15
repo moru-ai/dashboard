@@ -6,6 +6,8 @@
 
 # Moru Dashboard
 
+The official dashboard for [Moru](https://github.com/moru-ai/moru).
+
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/moru-ai/dashboard?style=social)](https://github.com/moru-ai/dashboard)
 
