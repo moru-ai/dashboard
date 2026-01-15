@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "@e2b/dashboard",
+      "name": "@moru/dashboard",
       "dependencies": {
         "@google-cloud/storage": "^7.15.2",
         "@hookform/resolvers": "^5.2.2",
