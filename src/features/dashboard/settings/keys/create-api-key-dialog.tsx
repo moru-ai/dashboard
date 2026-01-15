@@ -67,6 +67,9 @@ const CreateApiKeyDialog: FC<CreateApiKeyDialogProps> = ({ children }) => {
     onSuccess: ({ data }) => {
       if (data?.createdApiKey) {
         setCreatedApiKey(data.createdApiKey.key)
+        posthog.capture('api_key_created', {
+          key_name: data.createdApiKey.name,
+        })
         form.reset()
       }
     },
@@ -139,7 +142,7 @@ const CreateApiKeyDialog: FC<CreateApiKeyDialogProps> = ({ children }) => {
                 <CopyButton
                   value={createdApiKey}
                   onCopy={() => {
-                    posthog.capture('copied API key')
+                    posthog.capture('api_key_copied')
                   }}
                 />
               </div>

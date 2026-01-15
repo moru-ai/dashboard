@@ -21,15 +21,25 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { usePostHog } from 'posthog-js/react'
 import { useEffect, useState } from 'react'
 
 export function CLILoginForm({ next }: { next: string }) {
   'use no memo'
 
   const searchParams = useSearchParams()
+  const posthog = usePostHog()
 
   // Build returnTo URL for OAuth and form submission
   const returnTo = `${AUTH_URLS.CLI}?next=${encodeURIComponent(next)}`
+
+  // Track CLI auth page view
+  useEffect(() => {
+    const cliVersion = searchParams.get('cliVersion')
+    posthog.capture('cli_auth_page_viewed', {
+      cli_version: cliVersion,
+    })
+  }, [posthog, searchParams])
 
   const [message, setMessage] = useState<AuthMessage | undefined>(() => {
     const error = searchParams.get('error')

@@ -24,12 +24,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { usePostHog } from 'posthog-js/react'
 import { Suspense, useEffect, useState } from 'react'
 
 export default function SignUp() {
   'use no memo'
 
   const searchParams = useSearchParams()
+  const posthog = usePostHog()
   const [message, setMessage] = useState<AuthMessage | undefined>(() => {
     const error = searchParams.get('error')
     const success = searchParams.get('success')
@@ -48,6 +50,7 @@ export default function SignUp() {
   } = useHookFormAction(signUpAction, zodResolver(signUpSchema), {
     actionProps: {
       onSuccess: () => {
+        posthog.capture('user_signed_up')
         setMessage({ success: USER_MESSAGES.signUpVerification.message })
       },
       onError: ({ error }) => {
