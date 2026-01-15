@@ -74,7 +74,9 @@ export async function GET(request: NextRequest) {
   const country = request.headers.get("x-vercel-ip-country") || "unknown";
   const city = request.headers.get("x-vercel-ip-city") || "unknown";
 
-  const distinctId = await hashString(ip);
+  // Combine IP + User-Agent for more unique tracking
+  // Different machines on same network will have different IDs
+  const distinctId = await hashString(`${ip}:${userAgent}`);
 
   // Send PostHog event (non-blocking)
   // Use the same PostHog key as the client-side (works for server-side too)
