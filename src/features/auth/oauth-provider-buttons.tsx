@@ -5,9 +5,9 @@ import { Button } from '@/ui/primitives/button'
 import { useAction } from 'next-safe-action/hooks'
 import { useSearchParams } from 'next/navigation'
 
-export function OAuthProviders() {
+export function OAuthProviders({ returnTo: returnToProp }: { returnTo?: string } = {}) {
   const searchParams = useSearchParams()
-  const returnTo = searchParams.get('returnTo')
+  const returnTo = returnToProp ?? searchParams.get('returnTo')
 
   const { execute, isTransitioning } = useAction(signInWithOAuthAction)
 

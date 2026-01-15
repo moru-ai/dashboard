@@ -4,21 +4,21 @@ import { createClient } from '@/lib/clients/supabase/server'
 import { encodedRedirect } from '@/lib/utils/auth'
 import { generateMoruUserAccessToken } from '@/lib/utils/server'
 import { getDefaultTeamRelation } from '@/server/auth/get-default-team'
-import { Alert, AlertDescription, AlertTitle } from '@/ui/primitives/alert'
-import { CloudIcon, LaptopIcon, Link2Icon } from 'lucide-react'
+import { CheckCircle2Icon } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import { serializeError } from 'serialize-error'
+import { CLILoginForm } from './cli-login-form'
 
 // Types
 type CLISearchParams = Promise<{
   next?: string
+  returnTo?: string
   state?: string
   error?: string
 }>
 
 // Server Actions
-
 async function handleCLIAuth(
   next: string,
   userId: string,
@@ -47,37 +47,16 @@ async function handleCLIAuth(
 }
 
 // UI Components
-function CLIIcons() {
+function SuccessState({ email }: { email?: string }) {
   return (
-    <p className="flex items-center justify-center gap-4 text-3xl  tracking-tight sm:text-4xl">
-      <span className="text-fg-tertiary">
-        <LaptopIcon size={50} />
-      </span>
-      <span className="text-fg-secondary">
-        <Link2Icon size={30} />
-      </span>
-      <span className="text-fg-tertiary">
-        <CloudIcon size={50} />
-      </span>
-    </p>
-  )
-}
-
-function ErrorAlert({ message }: { message: string }) {
-  return (
-    <Alert variant="error" border="bottom" className="text-start">
-      <AlertTitle>Error</AlertTitle>
-      <AlertDescription>{message}</AlertDescription>
-    </Alert>
-  )
-}
-
-function SuccessState() {
-  return (
-    <>
-      <h2 className="text-brand-400 ">Successfully linked</h2>
-      <div>You can close this page and start using CLI.</div>
-    </>
+    <div className="text-center">
+      <CheckCircle2Icon className="text-brand-400 mx-auto h-12 w-12" />
+      <h1 className="mt-4">Successfully connected</h1>
+      {email && <p className="text-fg-secondary mt-1">{email}</p>}
+      <p className="text-fg-tertiary mt-6">
+        Your CLI is now linked. You can close this page.
+      </p>
+    </div>
   )
 }
 
@@ -94,8 +73,9 @@ export default async function CLIAuthPage({
     data: { user },
   } = await supabase.auth.getUser()
 
+  // Success state - CLI received token
   if (state === 'success') {
-    return <SuccessState />
+    return <SuccessState email={user?.email} />
   }
 
   // Validate redirect URL
@@ -113,15 +93,16 @@ export default async function CLIAuthPage({
     redirect(PROTECTED_URLS.DASHBOARD)
   }
 
-  // If user is not authenticated, redirect to sign in with return URL
+  // If user is not authenticated, show login UI
   if (!user) {
-    const searchParams = new URLSearchParams({
-      returnTo: `${AUTH_URLS.CLI}?${new URLSearchParams({ next }).toString()}`,
-    })
-    redirect(`${AUTH_URLS.SIGN_IN}?${searchParams.toString()}`)
+    return (
+      <Suspense fallback={<div>Loading...</div>}>
+        <CLILoginForm next={next} />
+      </Suspense>
+    )
   }
 
-  // Handle CLI callback if authenticated
+  // Handle CLI callback if authenticated - generate token and redirect to CLI
   if (!error && next && user) {
     try {
       const {
@@ -161,21 +142,10 @@ export default async function CLIAuthPage({
     }
   }
 
+  // Fallback - show login
   return (
-    <div className="p-6 text-center">
-      <CLIIcons />
-      <h2 className="mt-6 text-base leading-7">
-        Linking CLI with your account
-      </h2>
-      <div className="text-fg-tertiary mt-12 leading-8">
-        <Suspense fallback={<div>Loading...</div>}>
-          {error ? (
-            <ErrorAlert message={decodeURIComponent(error)} />
-          ) : (
-            <div>Authorizing CLI...</div>
-          )}
-        </Suspense>
-      </div>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <CLILoginForm next={next ?? ''} />
+    </Suspense>
   )
 }
