@@ -1,4 +1,4 @@
-import { AUTH_URLS, PROTECTED_URLS } from '@/configs/urls'
+import { PROTECTED_URLS } from '@/configs/urls'
 import { l } from '@/lib/clients/logger/logger'
 import { createClient } from '@/lib/clients/supabase/server'
 import { encodedRedirect } from '@/lib/utils/auth'
@@ -56,6 +56,12 @@ function SuccessState({ email }: { email?: string }) {
       <p className="text-fg-tertiary mt-6">
         Your CLI is now linked. You can close this page.
       </p>
+      <a
+        href={PROTECTED_URLS.DASHBOARD}
+        className="text-fg-secondary mt-4 inline-block text-sm underline underline-offset-2"
+      >
+        Go to Dashboard
+      </a>
     </div>
   )
 }
