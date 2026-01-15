@@ -29,7 +29,7 @@ function TerminalMock() {
         <div>
           <div className="text-fg-tertiary"># Create sandbox and run command</div>
           <div className="text-fg-secondary">
-            <span className="text-green-400">$</span> moru sandbox run base echo "Hello from Moru!"
+            <span className="text-green-400">$</span> moru sandbox run base echo 'hello world!'
           </div>
         </div>
         <div>
