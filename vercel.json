@@ -19,6 +19,10 @@
   ],
   "rewrites": [
     {
+      "source": "/cli/install.sh",
+      "destination": "/api/cli/install"
+    },
+    {
       "source": "/docs",
       "destination": "https://moru.mintlify.dev/docs"
     },
