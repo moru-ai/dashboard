@@ -27,12 +27,6 @@ function TerminalMock() {
       {/* Terminal content */}
       <div className="space-y-4 p-6 font-mono text-sm">
         <div>
-          <div className="text-fg-tertiary"># Login</div>
-          <div className="text-fg-secondary">
-            <span className="text-green-400">$</span> moru auth login
-          </div>
-        </div>
-        <div>
           <div className="text-fg-tertiary"># Create sandbox and run command</div>
           <div className="text-fg-secondary">
             <span className="text-green-400">$</span> moru sandbox run base echo "Hello from Moru!"
