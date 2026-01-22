@@ -37,16 +37,26 @@ export default async function DashboardLayout({
   const { teamIdOrSlug } = await params
 
   const session = await getSessionInsecure()
-  const { error, data } = await getUserByToken(session?.access_token)
+  if (!session?.access_token) {
+    throw redirect(AUTH_URLS.SIGN_IN)
+  }
 
   const sidebarState = cookieStore.get(COOKIE_KEYS.SIDEBAR_STATE)?.value
   const defaultOpen = sidebarState === 'true'
+
+  // Parallelize user and team fetching
+  // getUserByToken uses React.cache() so duplicate calls in getTeam are deduplicated
+  const [userResult, teamRes] = await Promise.all([
+    getUserByToken(session.access_token),
+    getTeam({ teamIdOrSlug }),
+  ])
+
+  const { error, data } = userResult
 
   if (error || !data.user) {
     throw redirect(AUTH_URLS.SIGN_IN)
   }
 
-  const teamRes = await getTeam({ teamIdOrSlug })
   const team = teamRes?.data
 
   if (!team) {

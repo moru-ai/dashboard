@@ -42,3 +42,9 @@ next-env.d.ts
 
 # tooling
 /template
+
+#extra
+moru.io.har
+moru.io-20260122T150031.json
+moru.io-2.json
+moru.io-3.json
