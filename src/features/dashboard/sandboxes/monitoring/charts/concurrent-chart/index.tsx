@@ -1,11 +1,24 @@
 'use client'
 
+import { ChartPlaceholder } from '@/ui/chart-placeholder'
 import { ReactiveLiveBadge } from '@/ui/live'
+import dynamic from 'next/dynamic'
 import { useCallback, useRef } from 'react'
 import { useTeamMetricsCharts } from '../../charts-context'
 import { AnimatedMetricDisplay } from '../animated-metric-display'
-import TeamMetricsChart from '../team-metrics-chart'
 import { RangeLabel } from './components/range-label'
+
+const TeamMetricsChart = dynamic(() => import('../team-metrics-chart'), {
+  ssr: false,
+  loading: () => (
+    <ChartPlaceholder
+      isLoading
+      classNames={{
+        container: 'mt-3 md:mt-4 flex-1 max-md:min-h-[30dvh]',
+      }}
+    />
+  ),
+})
 import { TimeRangeSelector } from './components/time-range-selector'
 import {
   useConcurrentChartData,

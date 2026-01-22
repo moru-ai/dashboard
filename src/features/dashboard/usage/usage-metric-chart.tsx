@@ -2,6 +2,7 @@
 
 import { AnimatedMetricDisplay } from '@/features/dashboard/sandboxes/monitoring/charts/animated-metric-display'
 import { cn } from '@/lib/utils'
+import { ChartPlaceholder } from '@/ui/chart-placeholder'
 import { Button } from '@/ui/primitives/button'
 import {
   Card,
@@ -12,10 +13,22 @@ import {
 import { Dialog, DialogContent } from '@/ui/primitives/dialog'
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { Maximize2 } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
-import ComputeUsageChart from './compute-usage-chart'
 import { useUsageCharts } from './usage-charts-context'
 import { UsageTimeRangeControls } from './usage-time-range-controls'
+
+const ComputeUsageChart = dynamic(() => import('./compute-usage-chart'), {
+  ssr: false,
+  loading: () => (
+    <ChartPlaceholder
+      isLoading
+      classNames={{
+        container: 'flex-1 min-h-0',
+      }}
+    />
+  ),
+})
 
 type UsageMetricType = 'sandboxes' | 'cost' | 'vcpu' | 'ram'
 
