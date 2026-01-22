@@ -1,8 +1,7 @@
 import type { TeamMetricsResponse } from '@/app/api/teams/[teamId]/metrics/types'
 import { formatCompactDate, formatDecimal } from '@/lib/utils/formatting'
 import { useMemo } from 'react'
-import { transformMetrics } from '../team-metrics-chart'
-import { calculateAverage } from '../team-metrics-chart/utils'
+import { calculateAverage, transformMetrics } from '../team-metrics-chart/utils'
 
 interface HoveredValue {
   timestamp: number

@@ -2,8 +2,7 @@ import type { TeamMetricsResponse } from '@/app/api/teams/[teamId]/metrics/types
 import { formatCompactDate, formatNumber } from '@/lib/utils/formatting'
 import { formatTimeframeAsISO8601Interval } from '@/lib/utils/timeframe'
 import { useMemo } from 'react'
-import { transformMetrics } from '../team-metrics-chart'
-import { calculateAverage } from '../team-metrics-chart/utils'
+import { calculateAverage, transformMetrics } from '../team-metrics-chart/utils'
 import { findMatchingChartRange, findMatchingTimeOption } from './utils'
 
 interface HoveredValue {
