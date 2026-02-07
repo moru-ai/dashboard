@@ -103,6 +103,7 @@ export async function GET(request: NextRequest) {
   // Fetch install script from GitHub
   const response = await fetch(INSTALL_SCRIPT_URL, {
     headers: { "User-Agent": "moru-cli-install/1.0" },
+    cache: "no-store",
   });
 
   if (!response.ok) {
